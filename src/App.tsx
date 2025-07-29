@@ -2,7 +2,7 @@
 
 
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import AddShift from './pages/AddShift';
 import Shifts from './pages/Shifts';

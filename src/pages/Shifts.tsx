@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getShifts, clearShifts, getSettings } from '../api/supabaseApi';
 
 const getUserId = () => {

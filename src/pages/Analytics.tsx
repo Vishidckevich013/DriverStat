@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getShifts, getSettings } from '../api/supabaseApi';
 
 const getUserId = () => {
