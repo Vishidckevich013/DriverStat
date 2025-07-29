@@ -4,12 +4,6 @@ import { useState, useEffect } from 'react';
 import { addShift } from '../api/supabaseApi';
 
 
-interface Shift {
-  date: string;
-  orders: number;
-  distance: number;
-  type?: 'day' | 'evening';
-}
 
 
 
