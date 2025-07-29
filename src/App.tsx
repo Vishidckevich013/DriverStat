@@ -2,7 +2,7 @@
 
 
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import AddShift from './pages/AddShift';
 import Shifts from './pages/Shifts';
@@ -19,8 +19,41 @@ const pageMeta: Record<Exclude<Page, 'home'>, { title: string }> = {
   settings: { title: 'Настройки' },
 };
 
+
+function getTelegramUserId() {
+  return (window as any).Telegram?.WebApp?.initDataUnsafe?.user?.id;
+}
+
 function App() {
   const [page, setPage] = useState<Page>('home');
+  const [authChecked, setAuthChecked] = useState(false);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+
+  // Проверяем авторизацию при загрузке
+  React.useEffect(() => {
+    const id = getTelegramUserId();
+    setUserId(id);
+    setAuthChecked(true);
+  }, []);
+
+  if (!authChecked) {
+    return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
+  }
+
+  if (!userId) {
+    return (
+      <div className="tg-app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#181c2f' }}>
+        <h1 style={{ color: '#6c4aff', marginBottom: 32 }}>DRIVER STAT</h1>
+        <div style={{ color: '#fff', marginBottom: 24, fontSize: '1.1em' }}>Для работы приложения требуется авторизация через Telegram.</div>
+        <button className="tg-btn" style={{ fontSize: '1.1em', padding: '12px 28px', background: '#6c4aff', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer' }} onClick={() => window.location.reload()}>
+          Войти через Telegram
+        </button>
+        <div style={{ color: '#bfc1c7', marginTop: 18, fontSize: '0.95em', maxWidth: 320, textAlign: 'center' }}>
+          Откройте приложение через Telegram-бота, чтобы авторизация прошла автоматически.
+        </div>
+      </div>
+    );
+  }
 
   let content = null;
   let title = '';
