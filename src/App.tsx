@@ -31,6 +31,14 @@ function App() {
 
   // Проверяем авторизацию при загрузке
   React.useEffect(() => {
+    const tg = (window as any).Telegram?.WebApp;
+    if (tg) {
+      // Для отладки: выводим initDataUnsafe и user в консоль
+      console.log('Telegram.WebApp.initDataUnsafe:', tg.initDataUnsafe);
+      console.log('Telegram.WebApp.initDataUnsafe.user:', tg.initDataUnsafe?.user);
+    } else {
+      console.log('Telegram.WebApp не найден');
+    }
     const id = getTelegramUserId();
     setUserId(id);
     setAuthChecked(true);
@@ -41,6 +49,10 @@ function App() {
   }
 
   if (!userId) {
+    // Для отладки: выводим initDataUnsafe и user.id на экран
+    const tg = (window as any).Telegram?.WebApp;
+    const debugInitData = tg?.initDataUnsafe ? JSON.stringify(tg.initDataUnsafe, null, 2) : 'нет данных';
+    const debugUserId = tg?.initDataUnsafe?.user?.id || 'нет';
     return (
       <div className="tg-app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#181c2f' }}>
         <h1 style={{ color: '#6c4aff', marginBottom: 32 }}>DRIVER STAT</h1>
@@ -50,6 +62,12 @@ function App() {
         </button>
         <div style={{ color: '#bfc1c7', marginTop: 18, fontSize: '0.95em', maxWidth: 320, textAlign: 'center' }}>
           Откройте приложение через Telegram-бота, чтобы авторизация прошла автоматически.
+        </div>
+        <div style={{ color: '#ffb347', marginTop: 28, fontSize: '0.95em', maxWidth: 400, textAlign: 'left', background: '#23263a', padding: 12, borderRadius: 8 }}>
+          <b>Отладка Telegram WebApp:</b><br />
+          <b>user.id:</b> {debugUserId}<br />
+          <b>initDataUnsafe:</b>
+          <pre style={{ color: '#fff', fontSize: 12, background: 'none', margin: 0 }}>{debugInitData}</pre>
         </div>
       </div>
     );
