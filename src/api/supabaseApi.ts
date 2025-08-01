@@ -193,10 +193,19 @@ export async function getShifts(user_id: string) {
 
 // Добавить смену
 export async function addShift(user_id: string, shift: Omit<any, 'id' | 'user_id'>) {
+  console.log('API addShift: Добавляем смену для пользователя:', user_id);
+  console.log('API addShift: Данные смены:', shift);
+  
   const { data, error } = await supabase
     .from('shifts')
     .insert([{ ...shift, user_id }]);
-  if (error) throw error;
+    
+  if (error) {
+    console.error('API addShift: Ошибка при добавлении смены:', error);
+    throw error;
+  }
+  
+  console.log('API addShift: Смена успешно добавлена:', data);
   return data;
 }
 

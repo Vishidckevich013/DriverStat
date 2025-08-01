@@ -1,7 +1,7 @@
 
 
 import { useState, useEffect } from 'react';
-import { addShift, getCurrentUser } from '../api/supabaseApi';
+import { addShift, getCurrentUser, getSettings } from '../api/supabaseApi';
 
 const AddShift = () => {
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
@@ -12,25 +12,38 @@ const AddShift = () => {
   const [minSalaryEnabled, setMinSalaryEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>('');
+  const [initLoading, setInitLoading] = useState(true);
 
   useEffect(() => {
     const initUser = async () => {
       try {
+        console.log('AddShift: Получаем текущего пользователя...');
         const user = await getCurrentUser();
         if (user) {
+          console.log('AddShift: Пользователь найден:', user.id);
           setUserId(user.id);
+          
+          // Получаем настройки пользователя
+          console.log('AddShift: Получаем настройки...');
+          const settings = await getSettings(user.id);
+          console.log('AddShift: Настройки:', settings);
+          
+          if (settings && settings.minSalaryEnabled) {
+            setMinSalaryEnabled(true);
+          } else {
+            setMinSalaryEnabled(false);
+          }
+        } else {
+          console.error('AddShift: Пользователь не найден');
         }
       } catch (error) {
-        console.error('Ошибка получения пользователя:', error);
+        console.error('AddShift: Ошибка получения пользователя или настроек:', error);
+      } finally {
+        setInitLoading(false);
       }
     };
     
     initUser();
-    
-    // Для простоты: localStorage fallback, но лучше получать из Supabase
-    const s = JSON.parse(localStorage.getItem('settings') || 'null');
-    if (s && s.minSalaryEnabled) setMinSalaryEnabled(true);
-    else setMinSalaryEnabled(false);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,23 +55,34 @@ const AddShift = () => {
     
     setLoading(true);
     try {
-      await addShift(userId, {
+      console.log('AddShift: Добавляем смену для пользователя:', userId);
+      const shiftData = {
         date,
         orders: Number(orders.replace(/^0+(?![.,]|$)/, '')),
         distance: Number(distance.replace(/^0+(?![.,]|$)/, '')),
         type: minSalaryEnabled ? type : undefined,
-      });
+      };
+      console.log('AddShift: Данные смены:', shiftData);
+      
+      await addShift(userId, shiftData);
+      console.log('AddShift: Смена успешно добавлена');
+      
       setSuccess(true);
       setOrders('');
       setDistance('');
       setDate(new Date().toISOString().slice(0, 10));
       setTimeout(() => setSuccess(false), 2000);
     } catch (err) {
+      console.error('AddShift: Ошибка при добавлении смены:', err);
       alert('Ошибка при добавлении смены!');
     } finally {
       setLoading(false);
     }
   };
+
+  if (initLoading) {
+    return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 340, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
