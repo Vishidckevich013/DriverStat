@@ -1,0 +1,137 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #181c2f;
+  padding: 20px;
+}
+
+.auth-form {
+  background: #23263a;
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.auth-title {
+  color: #6c4aff;
+  text-align: center;
+  margin: 0 0 12px 0;
+  font-size: 2.5em;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.auth-subtitle {
+  color: #fff;
+  text-align: center;
+  margin: 0 0 32px 0;
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+.auth-error {
+  background: #ff4757;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.95em;
+}
+
+.auth-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-field-icon {
+  position: absolute;
+  left: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+
+.auth-field input {
+  width: 100%;
+  padding: 16px 16px 16px 56px;
+  background: #181c2f;
+  border: 2px solid #2a2d42;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.auth-field input:focus {
+  outline: none;
+  border-color: #6c4aff;
+}
+
+.auth-field input::placeholder {
+  color: #bfc1c7;
+}
+
+.auth-field input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-btn {
+  background: #6c4aff;
+  color: #fff;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 8px;
+}
+
+.auth-btn:hover:not(:disabled) {
+  background: #5b3ed4;
+}
+
+.auth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 24px;
+  color: #bfc1c7;
+  font-size: 0.95em;
+}
+
+.auth-switch-btn {
+  background: none;
+  border: none;
+  color: #6c4aff;
+  cursor: pointer;
+  font-size: inherit;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.auth-switch-btn:hover:not(:disabled) {
+  color: #5b3ed4;
+}
+
+.auth-switch-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

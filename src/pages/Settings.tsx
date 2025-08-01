@@ -1,11 +1,11 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { getSettings, saveSettings } from '../api/supabaseApi';
+import { getSettings, saveSettings, getCurrentUser } from '../api/supabaseApi';
 
-const getUserId = () => {
-  return (window as any).Telegram?.WebApp?.initDataUnsafe?.user?.id || 'test_user';
-};
+interface SettingsProps {
+  onLogout: () => void;
+}
 
 const defaultSettings = {
   orderPrice: 100,
@@ -16,7 +16,7 @@ const defaultSettings = {
   minSalaryEvening: 35,
 };
 
-const Settings = () => {
+const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   const [orderPrice, setOrderPrice] = useState<string>(defaultSettings.orderPrice.toString());
   const [fuelPrice, setFuelPrice] = useState<string>(defaultSettings.fuelPrice.toString());
   const [fuelRate, setFuelRate] = useState<string>(defaultSettings.fuelRate.toString());
@@ -25,12 +25,20 @@ const Settings = () => {
   const [minSalaryEvening, setMinSalaryEvening] = useState<string>(defaultSettings.minSalaryEvening.toString());
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string>('');
 
   useEffect(() => {
     const fetchSettings = async () => {
       setLoading(true);
       try {
-        const s = await getSettings(getUserId());
+        const user = await getCurrentUser();
+        if (!user) {
+          onLogout();
+          return;
+        }
+        setUserId(user.id);
+
+        const s = await getSettings(user.id);
         if (s) {
           setOrderPrice(s.orderPrice?.toString() ?? defaultSettings.orderPrice.toString());
           setFuelPrice(s.fuelPrice?.toString() ?? defaultSettings.fuelPrice.toString());
@@ -40,19 +48,19 @@ const Settings = () => {
           setMinSalaryEvening(s.minSalaryEvening?.toString() ?? defaultSettings.minSalaryEvening.toString());
         }
       } catch (e) {
-        // fallback: ничего не делаем, оставляем дефолт
+        console.error('Ошибка загрузки настроек:', e);
       } finally {
         setLoading(false);
       }
     };
     fetchSettings();
-  }, []);
+  }, [onLogout]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await saveSettings(getUserId(), {
+      await saveSettings(userId, {
         orderPrice: parseFloat(orderPrice.replace(',', '.')),
         fuelPrice: parseFloat(fuelPrice.replace(',', '.')),
         fuelRate: parseFloat(fuelRate.replace(',', '.')),
@@ -72,9 +80,9 @@ const Settings = () => {
   if (loading) {
     return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
   }
+
   return (
     <div>
-      <h2>Настройки</h2>
       <form onSubmit={handleSubmit} style={{ maxWidth: 340, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <label>
           Стоимость за заказ (₽):
@@ -148,6 +156,22 @@ const Settings = () => {
         )}
         <button type="submit" disabled={loading}>{loading ? 'Сохраняю...' : 'Сохранить'}</button>
         {saved && <div style={{ color: '#6c4aff', marginTop: 8 }}>Настройки сохранены!</div>}
+        
+        <button 
+          type="button" 
+          onClick={onLogout}
+          style={{ 
+            background: '#ff4757', 
+            color: '#fff', 
+            border: 'none', 
+            padding: '12px 20px', 
+            borderRadius: 8, 
+            cursor: 'pointer',
+            marginTop: 20
+          }}
+        >
+          Выйти из аккаунта
+        </button>
       </form>
     </div>
   );

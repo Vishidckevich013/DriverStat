@@ -1,25 +1,29 @@
 
 
 import { useEffect, useState } from 'react';
-import { getShifts, clearShifts, getSettings } from '../api/supabaseApi';
-
-const getUserId = () => {
-  return (window as any).Telegram?.WebApp?.initDataUnsafe?.user?.id || 'test_user';
-};
+import { getShifts, clearShifts, getSettings, getCurrentUser } from '../api/supabaseApi';
 
 const Shifts = () => {
   const [shifts, setShifts] = useState<any[]>([]);
   const [settings, setSettings] = useState<any>({ orderPrice: 100, fuelPrice: 60, fuelRate: 10 });
   const [loading, setLoading] = useState(true);
   const [clearLoading, setClearLoading] = useState(false);
+  const [userId, setUserId] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const user = await getCurrentUser();
+        if (!user) {
+          console.error('Пользователь не авторизован');
+          return;
+        }
+        setUserId(user.id);
+
         const [shiftsData, settingsData] = await Promise.all([
-          getShifts(getUserId()),
-          getSettings(getUserId()),
+          getShifts(user.id),
+          getSettings(user.id),
         ]);
         setShifts(shiftsData || []);
         setSettings(settingsData || {});
@@ -33,9 +37,14 @@ const Shifts = () => {
   }, []);
 
   const handleClear = async () => {
+    if (!userId) {
+      alert('Ошибка: пользователь не авторизован');
+      return;
+    }
+    
     setClearLoading(true);
     try {
-      await clearShifts(getUserId());
+      await clearShifts(userId);
       setShifts([]);
     } catch (e) {
       alert('Ошибка при очистке истории!');

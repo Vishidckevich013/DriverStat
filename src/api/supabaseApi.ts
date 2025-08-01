@@ -1,5 +1,71 @@
 import { supabase } from '../supabaseClient';
 
+// Типы для пользователя
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  created_at: string;
+}
+
+// Авторизация
+export async function signUp(email: string, password: string, name: string): Promise<User> {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        name: name
+      }
+    }
+  });
+  
+  if (error) throw error;
+  if (!data.user) throw new Error('Ошибка создания пользователя');
+  
+  return {
+    id: data.user.id,
+    email: data.user.email!,
+    name: name,
+    created_at: data.user.created_at!
+  };
+}
+
+export async function signIn(email: string, password: string): Promise<User> {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  
+  if (error) throw error;
+  if (!data.user) throw new Error('Ошибка авторизации');
+  
+  return {
+    id: data.user.id,
+    email: data.user.email!,
+    name: data.user.user_metadata?.name || 'Пользователь',
+    created_at: data.user.created_at!
+  };
+}
+
+export async function signOut() {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+}
+
+export async function getCurrentUser(): Promise<User | null> {
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) return null;
+  
+  return {
+    id: user.id,
+    email: user.email!,
+    name: user.user_metadata?.name || 'Пользователь',
+    created_at: user.created_at!
+  };
+}
+
 // Получить все смены пользователя
 export async function getShifts(user_id: string) {
   const { data, error } = await supabase

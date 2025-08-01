@@ -1,11 +1,7 @@
 
 
 import { useState, useEffect, useMemo } from 'react';
-import { getShifts, getSettings } from '../api/supabaseApi';
-
-const getUserId = () => {
-  return (window as any).Telegram?.WebApp?.initDataUnsafe?.user?.id || 'test_user';
-};
+import { getShifts, getSettings, getCurrentUser } from '../api/supabaseApi';
 
 const calcFuel = (shift: any, settings: any) => {
   const fuelPrice = Number(settings.fuelPrice) || 0;
@@ -41,14 +37,20 @@ const Analytics = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const user = await getCurrentUser();
+        if (!user) {
+          console.error('Пользователь не авторизован');
+          return;
+        }
+
         const [shiftsData, settingsData] = await Promise.all([
-          getShifts(getUserId()),
-          getSettings(getUserId()),
+          getShifts(user.id),
+          getSettings(user.id),
         ]);
         setShifts(shiftsData || []);
         setSettings(settingsData || {});
       } catch (e) {
-        // fallback: ничего не делаем
+        console.error('Ошибка загрузки данных:', e);
       } finally {
         setLoading(false);
       }

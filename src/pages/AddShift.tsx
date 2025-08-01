@@ -1,15 +1,7 @@
 
 
 import { useState, useEffect } from 'react';
-import { addShift } from '../api/supabaseApi';
-
-
-
-
-
-const getUserId = () => {
-  return (window as any).Telegram?.WebApp?.initDataUnsafe?.user?.id || 'test_user';
-};
+import { addShift, getCurrentUser } from '../api/supabaseApi';
 
 const AddShift = () => {
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
@@ -19,8 +11,22 @@ const AddShift = () => {
   const [success, setSuccess] = useState(false);
   const [minSalaryEnabled, setMinSalaryEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<string>('');
 
   useEffect(() => {
+    const initUser = async () => {
+      try {
+        const user = await getCurrentUser();
+        if (user) {
+          setUserId(user.id);
+        }
+      } catch (error) {
+        console.error('Ошибка получения пользователя:', error);
+      }
+    };
+    
+    initUser();
+    
     // Для простоты: localStorage fallback, но лучше получать из Supabase
     const s = JSON.parse(localStorage.getItem('settings') || 'null');
     if (s && s.minSalaryEnabled) setMinSalaryEnabled(true);
@@ -29,9 +35,14 @@ const AddShift = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!userId) {
+      alert('Ошибка: пользователь не авторизован');
+      return;
+    }
+    
     setLoading(true);
     try {
-      await addShift(getUserId(), {
+      await addShift(userId, {
         date,
         orders: Number(orders.replace(/^0+(?![.,]|$)/, '')),
         distance: Number(distance.replace(/^0+(?![.,]|$)/, '')),
