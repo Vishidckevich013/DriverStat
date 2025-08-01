@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { addShift, getCurrentUser, getSettings } from '../api/supabaseApi';
+import NotificationModal from '../components/NotificationModal';
 
 const AddShift = () => {
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
@@ -13,6 +14,10 @@ const AddShift = () => {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>('');
   const [initLoading, setInitLoading] = useState(true);
+  
+  // Состояния для модальных окон
+  const [showNotification, setShowNotification] = useState(false);
+  const [notification, setNotification] = useState({ title: '', message: '', type: 'info' as any });
 
   useEffect(() => {
     const initUser = async () => {
@@ -49,7 +54,12 @@ const AddShift = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) {
-      alert('Ошибка: пользователь не авторизован');
+      setNotification({
+        title: 'Ошибка авторизации',
+        message: 'Пользователь не авторизован',
+        type: 'error'
+      });
+      setShowNotification(true);
       return;
     }
     
@@ -72,6 +82,13 @@ const AddShift = () => {
       setDistance('');
       setDate(new Date().toISOString().slice(0, 10));
       setTimeout(() => setSuccess(false), 2000);
+      
+      setNotification({
+        title: 'Успешно!',
+        message: 'Смена успешно добавлена',
+        type: 'success'
+      });
+      setShowNotification(true);
     } catch (err) {
       console.error('AddShift: Ошибка при добавлении смены:', err);
       console.error('AddShift: Детали ошибки:', {
@@ -80,7 +97,12 @@ const AddShift = () => {
         hint: (err as any).hint,
         code: (err as any).code
       });
-      alert(`Ошибка при добавлении смены: ${(err as any).message || 'Неизвестная ошибка'}`);
+      setNotification({
+        title: 'Ошибка добавления',
+        message: `Ошибка при добавлении смены: ${(err as any).message || 'Неизвестная ошибка'}`,
+        type: 'error'
+      });
+      setShowNotification(true);
     } finally {
       setLoading(false);
     }
@@ -162,6 +184,15 @@ const AddShift = () => {
           Перейти в настройки
         </button>
       </div>
+
+      {/* Модальное окно уведомлений */}
+      <NotificationModal
+        isOpen={showNotification}
+        onClose={() => setShowNotification(false)}
+        title={notification.title}
+        message={notification.message}
+        type={notification.type}
+      />
     </form>
   );
 };

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { getShifts, clearShifts, getSettings, getCurrentUser, deleteShift, updateShift } from '../api/supabaseApi';
+import ConfirmModal from '../components/ConfirmModal';
+import NotificationModal from '../components/NotificationModal';
 
 const Shifts = () => {
   const [shifts, setShifts] = useState<any[]>([]);
@@ -11,6 +13,13 @@ const Shifts = () => {
   const [userId, setUserId] = useState<string>('');
   const [editingShift, setEditingShift] = useState<any>(null);
   const [deleteLoading, setDeleteLoading] = useState<number | null>(null);
+  
+  // Состояния для модальных окон
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [shiftToDelete, setShiftToDelete] = useState<any>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notification, setNotification] = useState({ title: '', message: '', type: 'info' as any });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,50 +62,82 @@ const Shifts = () => {
 
   const handleClear = async () => {
     if (!userId) {
-      alert('Ошибка: пользователь не авторизован');
+      setNotification({
+        title: 'Ошибка авторизации',
+        message: 'Пользователь не авторизован',
+        type: 'error'
+      });
+      setShowNotification(true);
       return;
     }
     
-    // Подтверждение с предупреждением
-    const confirmation = window.confirm(
-      `⚠️ ВНИМАНИЕ!\n\nВы действительно хотите удалить ВСЮ историю смен?\n\n• Будут удалены все ${shifts.length} смен(ы)\n• Восстановить данные будет НЕВОЗМОЖНО\n• Это действие нельзя отменить\n\nВы уверены, что хотите продолжить?`
-    );
-    
-    if (!confirmation) {
-      return;
-    }
-    
+    // Показываем модальное окно подтверждения
+    setShowClearConfirm(true);
+  };
+
+  const confirmClearShifts = async () => {
     setClearLoading(true);
     try {
       await clearShifts(userId);
       setShifts([]);
-      alert('История смен успешно очищена');
+      setNotification({
+        title: 'Успешно!',
+        message: 'История смен успешно очищена',
+        type: 'success'
+      });
+      setShowNotification(true);
     } catch (e) {
       console.error('Ошибка при очистке истории:', e);
-      alert('Ошибка при очистке истории!');
+      setNotification({
+        title: 'Ошибка',
+        message: 'Ошибка при очистке истории!',
+        type: 'error'
+      });
+      setShowNotification(true);
     } finally {
       setClearLoading(false);
     }
   };
 
-  const handleDeleteShift = async (shiftId: number) => {
+  const handleDeleteShift = async (shift: any) => {
     if (!userId) {
-      alert('Ошибка: пользователь не авторизован');
+      setNotification({
+        title: 'Ошибка авторизации',
+        message: 'Пользователь не авторизован',
+        type: 'error'
+      });
+      setShowNotification(true);
       return;
     }
     
-    const confirmation = window.confirm('Удалить эту смену?');
-    if (!confirmation) return;
+    setShiftToDelete(shift);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDeleteShift = async () => {
+    if (!shiftToDelete) return;
     
-    setDeleteLoading(shiftId);
+    setDeleteLoading(shiftToDelete.id);
     try {
-      await deleteShift(userId, shiftId);
-      setShifts(shifts.filter(s => s.id !== shiftId));
+      await deleteShift(userId, shiftToDelete.id);
+      setShifts(shifts.filter(s => s.id !== shiftToDelete.id));
+      setNotification({
+        title: 'Успешно!',
+        message: 'Смена удалена',
+        type: 'success'
+      });
+      setShowNotification(true);
     } catch (e) {
       console.error('Ошибка при удалении смены:', e);
-      alert('Ошибка при удалении смены!');
+      setNotification({
+        title: 'Ошибка',
+        message: 'Ошибка при удалении смены!',
+        type: 'error'
+      });
+      setShowNotification(true);
     } finally {
       setDeleteLoading(null);
+      setShiftToDelete(null);
     }
   };
 
@@ -289,7 +330,7 @@ const Shifts = () => {
                         ✏️
                       </button>
                       <button 
-                        onClick={() => handleDeleteShift(shift.id)}
+                        onClick={() => handleDeleteShift(shift)}
                         disabled={deleteLoading === shift.id || editingShift !== null}
                         style={{ 
                           padding: '4px 8px', 
@@ -311,6 +352,44 @@ const Shifts = () => {
           </tbody>
         </table>
       )}
+
+      {/* Модальное окно подтверждения очистки истории */}
+      <ConfirmModal
+        isOpen={showClearConfirm}
+        onClose={() => setShowClearConfirm(false)}
+        onConfirm={confirmClearShifts}
+        title="Удаление всей истории"
+        message={`⚠️ ВНИМАНИЕ!\n\nВы действительно хотите удалить ВСЮ историю смен?\n\n• Будут удалены все ${shifts.length} смен(ы)\n• Восстановить данные будет НЕВОЗМОЖНО\n• Это действие нельзя отменить\n\nВы уверены, что хотите продолжить?`}
+        confirmText="Да, удалить всё"
+        cancelText="Отмена"
+        type="warning"
+        isDangerous={true}
+      />
+
+      {/* Модальное окно подтверждения удаления смены */}
+      <ConfirmModal
+        isOpen={showDeleteConfirm}
+        onClose={() => {
+          setShowDeleteConfirm(false);
+          setShiftToDelete(null);
+        }}
+        onConfirm={confirmDeleteShift}
+        title="Удаление смены"
+        message={shiftToDelete ? `Удалить смену от ${new Date(shiftToDelete.date).toLocaleDateString('ru-RU')}?` : ''}
+        confirmText="Удалить"
+        cancelText="Отмена"
+        type="warning"
+        isDangerous={true}
+      />
+
+      {/* Модальное окно уведомлений */}
+      <NotificationModal
+        isOpen={showNotification}
+        onClose={() => setShowNotification(false)}
+        title={notification.title}
+        message={notification.message}
+        type={notification.type}
+      />
     </div>
   );
 };

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { getSettings, saveSettings, getCurrentUser, checkDatabaseTables, refreshSupabaseSchema } from '../api/supabaseApi';
+import NotificationModal from '../components/NotificationModal';
 
 interface SettingsProps {
   onLogout: () => void;
@@ -27,6 +28,10 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string>('');
   const [diagLoading, setDiagLoading] = useState(false);
+  
+  // Состояния для модальных окон
+  const [showNotification, setShowNotification] = useState(false);
+  const [notification, setNotification] = useState({ title: '', message: '', type: 'info' as any });
   const [refreshLoading, setRefreshLoading] = useState(false);
 
   useEffect(() => {
@@ -81,7 +86,12 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
       setTimeout(() => setSaved(false), 2000);
     } catch (e) {
       console.error('Settings: Ошибка при сохранении настроек:', e);
-      alert(`Ошибка при сохранении настроек: ${(e as Error).message}`);
+      setNotification({
+        title: 'Ошибка сохранения',
+        message: `Ошибка при сохранении настроек: ${(e as Error).message}`,
+        type: 'error'
+      });
+      setShowNotification(true);
     } finally {
       setLoading(false);
     }
@@ -92,10 +102,20 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
     try {
       await checkDatabaseTables();
       console.log('Диагностика завершена. Проверьте консоль для деталей.');
-      alert('Диагностика завершена. Проверьте консоль браузера (F12) для деталей.');
+      setNotification({
+        title: 'Диагностика завершена',
+        message: 'Диагностика завершена. Проверьте консоль браузера (F12) для деталей.',
+        type: 'info'
+      });
+      setShowNotification(true);
     } catch (e) {
       console.error('Ошибка диагностики:', e);
-      alert(`Ошибка диагностики: ${(e as Error).message}`);
+      setNotification({
+        title: 'Ошибка диагностики',
+        message: `Ошибка диагностики: ${(e as Error).message}`,
+        type: 'error'
+      });
+      setShowNotification(true);
     } finally {
       setDiagLoading(false);
     }
@@ -106,13 +126,28 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
     try {
       const result = await refreshSupabaseSchema();
       if (result.success) {
-        alert('Схема базы данных успешно обновлена! Попробуйте сохранить настройки еще раз.');
+        setNotification({
+          title: 'Успешно!',
+          message: 'Схема базы данных успешно обновлена! Попробуйте сохранить настройки еще раз.',
+          type: 'success'
+        });
+        setShowNotification(true);
       } else {
-        alert(`Не удалось обновить схему: ${result.error}`);
+        setNotification({
+          title: 'Ошибка обновления',
+          message: `Не удалось обновить схему: ${result.error}`,
+          type: 'error'
+        });
+        setShowNotification(true);
       }
     } catch (e) {
       console.error('Ошибка обновления схемы:', e);
-      alert(`Ошибка обновления схемы: ${(e as Error).message}`);
+      setNotification({
+        title: 'Ошибка обновления',
+        message: `Ошибка обновления схемы: ${(e as Error).message}`,
+        type: 'error'
+      });
+      setShowNotification(true);
     } finally {
       setRefreshLoading(false);
     }
@@ -253,6 +288,15 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
           Выйти из аккаунта
         </button>
       </form>
+
+      {/* Модальное окно уведомлений */}
+      <NotificationModal
+        isOpen={showNotification}
+        onClose={() => setShowNotification(false)}
+        title={notification.title}
+        message={notification.message}
+        type={notification.type}
+      />
     </div>
   );
 };
