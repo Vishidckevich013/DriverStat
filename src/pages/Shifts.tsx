@@ -72,14 +72,13 @@ const Shifts = () => {
     return (shift.distance * fuelRate / 100) * fuelPrice;
   };
 
-  const calcEarnings = (shift: any) => {
+  const calcSalary = (shift: any) => {
     const orderPrice = Number(settings.orderPrice) || 0;
     const minSalaryEnabled = !!settings.minSalaryEnabled;
     const minSalaryDay = Number(settings.minSalaryDay) || 0;
     const minSalaryEvening = Number(settings.minSalaryEvening) || 0;
 
     const ordersSum = shift.orders * orderPrice;
-    const fuelCost = calcFuel(shift);
 
     let salary = ordersSum;
     if (minSalaryEnabled && shift.type) {
@@ -88,8 +87,12 @@ const Shifts = () => {
         salary = minSalary;
       }
     }
-    // Заработок = зарплата - топливо (а не плюс!)
-    return salary - fuelCost;
+    return salary;
+  };
+
+  const calcTotalEarnings = (shift: any) => {
+    // Общий заработок = зарплата + топливо
+    return calcSalary(shift) + calcFuel(shift);
   };
 
   if (loading) {
@@ -118,8 +121,9 @@ const Shifts = () => {
               {settings.minSalaryEnabled && <th>Тип</th>}
               <th>Заказы</th>
               <th>Пробег (км)</th>
+              <th>Зарплата (₽)</th>
               <th>Топливо (₽)</th>
-              <th>Оплата за заказы (₽)</th>
+              <th>Общий доход (₽)</th>
             </tr>
           </thead>
           <tbody>
@@ -129,8 +133,9 @@ const Shifts = () => {
                 {settings.minSalaryEnabled && <td>{shift.type === 'evening' ? 'Вечерняя' : 'Дневная'}</td>}
                 <td>{shift.orders}</td>
                 <td>{shift.distance}</td>
+                <td>{calcSalary(shift).toFixed(2)}</td>
                 <td>{calcFuel(shift).toFixed(2)}</td>
-                <td>{calcEarnings(shift).toFixed(2)}</td>
+                <td>{calcTotalEarnings(shift).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
