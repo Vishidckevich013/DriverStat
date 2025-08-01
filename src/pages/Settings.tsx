@@ -89,7 +89,7 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   const handleDiagnose = async () => {
     setDiagLoading(true);
     try {
-      const results = await checkDatabaseTables();
+      await checkDatabaseTables();
       console.log('Диагностика завершена. Проверьте консоль для деталей.');
       alert('Диагностика завершена. Проверьте консоль браузера (F12) для деталей.');
     } catch (e) {
