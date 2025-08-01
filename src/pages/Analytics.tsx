@@ -1,11 +1,7 @@
 
 
 import { useState, useEffect, useMemo } from 'react';
-import { getShifts, getSettings } from '../api/supabaseApi';
-
-const getUserId = () => {
-  return (window as any).Telegram?.WebApp?.initDataUnsafe?.user?.id || 'test_user';
-};
+import { getShifts, getSettings, getCurrentUser } from '../api/supabaseApi';
 
 const calcFuel = (shift: any, settings: any) => {
   const fuelPrice = Number(settings.fuelPrice) || 0;
@@ -13,12 +9,13 @@ const calcFuel = (shift: any, settings: any) => {
   return (shift.distance * fuelRate / 100) * fuelPrice;
 };
 
-const calcEarnings = (shift: any, settings: any) => {
+const calcSalary = (shift: any, settings: any) => {
   const orderPrice = Number(settings.orderPrice) || 0;
   const minSalaryEnabled = !!settings.minSalaryEnabled;
   const minSalaryDay = Number(settings.minSalaryDay) || 0;
   const minSalaryEvening = Number(settings.minSalaryEvening) || 0;
   const ordersSum = shift.orders * orderPrice;
+  
   let salary = ordersSum;
   if (minSalaryEnabled && shift.type) {
     const minSalary = shift.type === 'evening' ? minSalaryEvening : minSalaryDay;
@@ -26,8 +23,12 @@ const calcEarnings = (shift: any, settings: any) => {
       salary = minSalary;
     }
   }
-  salary = salary + calcFuel(shift, settings);
   return salary;
+};
+
+const calcTotalEarnings = (shift: any, settings: any) => {
+  // Общий доход = зарплата + топливо
+  return calcSalary(shift, settings) + calcFuel(shift, settings);
 };
 
 const Analytics = () => {
@@ -41,14 +42,20 @@ const Analytics = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const user = await getCurrentUser();
+        if (!user) {
+          console.error('Пользователь не авторизован');
+          return;
+        }
+
         const [shiftsData, settingsData] = await Promise.all([
-          getShifts(getUserId()),
-          getSettings(getUserId()),
+          getShifts(user.id),
+          getSettings(user.id),
         ]);
         setShifts(shiftsData || []);
         setSettings(settingsData || {});
       } catch (e) {
-        // fallback: ничего не делаем
+        console.error('Ошибка загрузки данных:', e);
       } finally {
         setLoading(false);
       }
@@ -65,8 +72,11 @@ const Analytics = () => {
   }, [shifts, from, to]);
 
   const totalDistance = filtered.reduce((sum, s) => sum + (s.distance || 0), 0);
-  const totalEarnings = filtered.reduce((sum, s) => sum + calcEarnings(s, settings), 0);
+  const totalOrders = filtered.reduce((sum, s) => sum + (s.orders || 0), 0);
+  const totalSalary = filtered.reduce((sum, s) => sum + calcSalary(s, settings), 0);
   const totalFuel = filtered.reduce((sum, s) => sum + calcFuel(s, settings), 0);
+  const totalEarnings = filtered.reduce((sum, s) => sum + calcTotalEarnings(s, settings), 0);
+  const avgSalary = filtered.length ? totalSalary / filtered.length : 0;
   const avgEarnings = filtered.length ? totalEarnings / filtered.length : 0;
   const avgDistance = filtered.length ? totalDistance / filtered.length : 0;
 
@@ -92,11 +102,18 @@ const Analytics = () => {
       ) : (
         <div style={{ background: '#23284a', borderRadius: 12, padding: 20, color: '#fff', maxWidth: 400, margin: '0 auto' }}>
           <div style={{ marginBottom: 10 }}>Всего смен: <b>{filtered.length}</b></div>
+          <div>Всего заказов: <b>{totalOrders}</b></div>
           <div>Суммарный пробег: <b>{totalDistance.toFixed(2)} км</b></div>
-          <div>Суммарный заработок: <b>{totalEarnings.toFixed(2)} ₽</b></div>
-          <div>Сумма за топливо: <b>{totalFuel.toFixed(2)} ₽</b></div>
-          <div>Средний заработок за смену: <b>{avgEarnings.toFixed(2)} ₽</b></div>
-          <div>Средний пробег за смену: <b>{avgDistance.toFixed(2)} км</b></div>
+          <div style={{ marginTop: 15, paddingTop: 15, borderTop: '1px solid #35363f' }}>
+            <div>Чистая зарплата: <b>{totalSalary.toFixed(2)} ₽</b></div>
+            <div>Компенсация топлива: <b>{totalFuel.toFixed(2)} ₽</b></div>
+            <div style={{ color: '#6c4aff', fontWeight: 'bold' }}>Общий доход: <b>{totalEarnings.toFixed(2)} ₽</b></div>
+          </div>
+          <div style={{ marginTop: 15, paddingTop: 15, borderTop: '1px solid #35363f' }}>
+            <div>Средняя зарплата за смену: <b>{avgSalary.toFixed(2)} ₽</b></div>
+            <div>Средний общий доход за смену: <b>{avgEarnings.toFixed(2)} ₽</b></div>
+            <div>Средний пробег за смену: <b>{avgDistance.toFixed(2)} км</b></div>
+          </div>
         </div>
       )}
     </div>

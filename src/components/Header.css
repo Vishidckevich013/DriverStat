@@ -1,0 +1,40 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #23284a;
+  color: #fff;
+  padding: 16px 32px;
+  border-bottom: 1px solid #23284a;
+}
+.search input {
+  background: #181c2f;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #fff;
+  outline: none;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-actions .user {
+  font-weight: 500;
+}
+.header-actions .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #353a5a;
+}
+.header-actions button {
+  background: #353a5a;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
