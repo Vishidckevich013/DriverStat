@@ -255,6 +255,14 @@ export async function saveSettings(user_id: string, settings: any) {
       hint: error.hint,
       code: error.code
     });
+    
+    // Более понятные ошибки для пользователя
+    if (error.code === 'PGRST204' && error.message.includes('column')) {
+      throw new Error('Структура базы данных устарела. Выполните скрипт fix-settings-table.sql в Supabase SQL Editor');
+    } else if (error.code === '42P01') {
+      throw new Error('Таблица settings не существует. Выполните полный SQL-скрипт в Supabase SQL Editor');
+    }
+    
     throw error;
   }
   
