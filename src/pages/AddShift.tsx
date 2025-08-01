@@ -74,7 +74,13 @@ const AddShift = () => {
       setTimeout(() => setSuccess(false), 2000);
     } catch (err) {
       console.error('AddShift: Ошибка при добавлении смены:', err);
-      alert('Ошибка при добавлении смены!');
+      console.error('AddShift: Детали ошибки:', {
+        message: (err as any).message,
+        details: (err as any).details,
+        hint: (err as any).hint,
+        code: (err as any).code
+      });
+      alert(`Ошибка при добавлении смены: ${(err as any).message || 'Неизвестная ошибка'}`);
     } finally {
       setLoading(false);
     }
