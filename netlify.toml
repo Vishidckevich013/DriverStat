@@ -1,0 +1,19 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Редиректы для SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Настройки для тестовой ветки
+[context.test-branch]
+  command = "npm run build"
+  
+[context.test-branch.environment]
+  NODE_ENV = "development"
