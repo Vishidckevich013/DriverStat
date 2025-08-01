@@ -44,11 +44,11 @@ function App() {
     checkUser();
   }, []);
 
-  const handleLogin = async (email: string, password: string) => {
+  const handleLogin = async (loginOrEmail: string, password: string, rememberMe: boolean) => {
     setAuthLoading(true);
     setAuthError('');
     try {
-      const user = await signIn(email, password);
+      const user = await signIn(loginOrEmail, password, rememberMe);
       setUser(user);
     } catch (error: any) {
       setAuthError(error.message || 'Ошибка входа');
@@ -57,11 +57,11 @@ function App() {
     }
   };
 
-  const handleRegister = async (email: string, password: string, name: string) => {
+  const handleRegister = async (email: string, password: string, name: string, username: string) => {
     setAuthLoading(true);
     setAuthError('');
     try {
-      const user = await signUp(email, password, name);
+      const user = await signUp(email, password, name, username);
       setUser(user);
     } catch (error: any) {
       setAuthError(error.message || 'Ошибка регистрации');

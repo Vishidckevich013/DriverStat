@@ -88,6 +88,27 @@
   cursor: not-allowed;
 }
 
+.auth-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.auth-checkbox input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  accent-color: #6c4aff;
+}
+
+.auth-checkbox label {
+  color: #bfc1c7;
+  font-size: 0.95em;
+  cursor: pointer;
+  margin: 0;
+}
+
 .auth-btn {
   background: #6c4aff;
   color: #fff;
