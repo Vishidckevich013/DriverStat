@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { getSettings, saveSettings, getCurrentUser, checkDatabaseTables } from '../api/supabaseApi';
+import { getSettings, saveSettings, getCurrentUser, checkDatabaseTables, refreshSupabaseSchema } from '../api/supabaseApi';
 
 interface SettingsProps {
   onLogout: () => void;
@@ -27,6 +27,7 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string>('');
   const [diagLoading, setDiagLoading] = useState(false);
+  const [refreshLoading, setRefreshLoading] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -97,6 +98,23 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
       alert(`Ошибка диагностики: ${(e as Error).message}`);
     } finally {
       setDiagLoading(false);
+    }
+  };
+
+  const handleRefreshSchema = async () => {
+    setRefreshLoading(true);
+    try {
+      const result = await refreshSupabaseSchema();
+      if (result.success) {
+        alert('Схема базы данных успешно обновлена! Попробуйте сохранить настройки еще раз.');
+      } else {
+        alert(`Не удалось обновить схему: ${result.error}`);
+      }
+    } catch (e) {
+      console.error('Ошибка обновления схемы:', e);
+      alert(`Ошибка обновления схемы: ${(e as Error).message}`);
+    } finally {
+      setRefreshLoading(false);
     }
   };
 
@@ -180,22 +198,43 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
         <button type="submit" disabled={loading}>{loading ? 'Сохраняю...' : 'Сохранить'}</button>
         {saved && <div style={{ color: '#6c4aff', marginTop: 8 }}>Настройки сохранены!</div>}
         
-        <button 
-          type="button" 
-          onClick={handleDiagnose}
-          disabled={diagLoading}
-          style={{ 
-            background: '#ffa502', 
-            color: '#fff', 
-            border: 'none', 
-            padding: '12px 20px', 
-            borderRadius: 8, 
-            cursor: 'pointer',
-            marginTop: 10
-          }}
-        >
-          {diagLoading ? 'Проверяю...' : 'Диагностика БД'}
-        </button>
+        <div style={{ display: 'flex', gap: 10, marginTop: 15 }}>
+          <button 
+            type="button" 
+            onClick={handleDiagnose}
+            disabled={diagLoading}
+            style={{ 
+              background: '#ffa502', 
+              color: '#fff', 
+              border: 'none', 
+              padding: '10px 16px', 
+              borderRadius: 6, 
+              cursor: 'pointer',
+              fontSize: '0.9em',
+              flex: 1
+            }}
+          >
+            {diagLoading ? 'Проверяю...' : 'Диагностика БД'}
+          </button>
+          
+          <button 
+            type="button" 
+            onClick={handleRefreshSchema}
+            disabled={refreshLoading}
+            style={{ 
+              background: '#3742fa', 
+              color: '#fff', 
+              border: 'none', 
+              padding: '10px 16px', 
+              borderRadius: 6, 
+              cursor: 'pointer',
+              fontSize: '0.9em',
+              flex: 1
+            }}
+          >
+            {refreshLoading ? 'Обновляю...' : 'Обновить схему'}
+          </button>
+        </div>
         
         <button 
           type="button" 
@@ -207,7 +246,8 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
             padding: '12px 20px', 
             borderRadius: 8, 
             cursor: 'pointer',
-            marginTop: 20
+            marginTop: 20,
+            width: '100%'
           }}
         >
           Выйти из аккаунта

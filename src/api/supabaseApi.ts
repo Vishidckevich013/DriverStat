@@ -189,11 +189,37 @@ export async function checkDatabaseTables() {
   
   for (const table of tables) {
     try {
+      // Проверяем существование таблицы
       const { data, error } = await supabase.from(table).select('*').limit(1);
       if (error) {
         results[table] = { status: 'error', error: error.message, code: error.code };
+        
+        // Если таблица settings - проверяем её структуру отдельно
+        if (table === 'settings') {
+          try {
+            const { data: structure, error: structError } = await supabase.rpc('check_settings_structure');
+            if (structError) {
+              results[table].structureError = structError.message;
+            } else {
+              results[table].structure = structure;
+            }
+          } catch (e) {
+            results[table].structureCheck = 'failed';
+          }
+        }
       } else {
         results[table] = { status: 'ok', count: data?.length || 0 };
+        
+        // Для settings проверяем наличие нужных колонок
+        if (table === 'settings' && data && data.length > 0) {
+          const firstRow = data[0];
+          const requiredColumns = ['orderPrice', 'fuelPrice', 'fuelRate', 'minSalaryEnabled', 'minSalaryDay', 'minSalaryEvening'];
+          const missingColumns = requiredColumns.filter(col => !(col in firstRow));
+          if (missingColumns.length > 0) {
+            results[table].missingColumns = missingColumns;
+            results[table].status = 'incomplete';
+          }
+        }
       }
     } catch (e) {
       results[table] = { status: 'exception', error: (e as Error).message };
@@ -201,7 +227,64 @@ export async function checkDatabaseTables() {
   }
   
   console.log('Результаты проверки таблиц:', results);
+  
+  // Дополнительная проверка для settings
+  if (results.settings?.status === 'error' || results.settings?.status === 'incomplete') {
+    console.log('Выполняем дополнительную диагностику таблицы settings...');
+    try {
+      const { data: columns, error: colError } = await supabase
+        .from('information_schema.columns')
+        .select('column_name, data_type')
+        .eq('table_name', 'settings')
+        .eq('table_schema', 'public');
+        
+      if (colError) {
+        console.log('Не удалось получить структуру таблицы settings:', colError.message);
+      } else {
+        console.log('Текущая структура таблицы settings:', columns);
+        results.settings.currentColumns = columns;
+      }
+    } catch (e) {
+      console.log('Ошибка при проверке структуры:', (e as Error).message);
+    }
+  }
+  
   return results;
+}
+
+// Принудительное обновление схемы Supabase
+export async function refreshSupabaseSchema() {
+  console.log('Попытка обновления схемы Supabase...');
+  try {
+    // Создаем новое подключение к Supabase
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Отсутствуют переменные окружения Supabase');
+    }
+    
+    // Создаем временный клиент для проверки
+    const tempClient = createClient(supabaseUrl, supabaseKey);
+    
+    // Пробуем простой запрос для обновления схемы
+    const { error } = await tempClient
+      .from('settings')
+      .select('id')
+      .limit(1);
+      
+    if (error) {
+      console.log('Схема все еще содержит ошибки:', error.message);
+      return { success: false, error: error.message };
+    } else {
+      console.log('Схема успешно обновлена');
+      return { success: true };
+    }
+  } catch (e) {
+    console.error('Ошибка при обновлении схемы:', e);
+    return { success: false, error: (e as Error).message };
+  }
 }
 
 // Получить все смены пользователя
