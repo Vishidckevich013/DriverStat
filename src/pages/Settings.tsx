@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { getSettings, saveSettings, getCurrentUser } from '../api/supabaseApi';
+import { getSettings, saveSettings, getCurrentUser, checkDatabaseTables } from '../api/supabaseApi';
 
 interface SettingsProps {
   onLogout: () => void;
@@ -26,6 +26,7 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string>('');
+  const [diagLoading, setDiagLoading] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -79,9 +80,23 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
       setTimeout(() => setSaved(false), 2000);
     } catch (e) {
       console.error('Settings: Ошибка при сохранении настроек:', e);
-      alert('Ошибка при сохранении настроек!');
+      alert(`Ошибка при сохранении настроек: ${(e as Error).message}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDiagnose = async () => {
+    setDiagLoading(true);
+    try {
+      const results = await checkDatabaseTables();
+      console.log('Диагностика завершена. Проверьте консоль для деталей.');
+      alert('Диагностика завершена. Проверьте консоль браузера (F12) для деталей.');
+    } catch (e) {
+      console.error('Ошибка диагностики:', e);
+      alert(`Ошибка диагностики: ${(e as Error).message}`);
+    } finally {
+      setDiagLoading(false);
     }
   };
 
@@ -164,6 +179,23 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
         )}
         <button type="submit" disabled={loading}>{loading ? 'Сохраняю...' : 'Сохранить'}</button>
         {saved && <div style={{ color: '#6c4aff', marginTop: 8 }}>Настройки сохранены!</div>}
+        
+        <button 
+          type="button" 
+          onClick={handleDiagnose}
+          disabled={diagLoading}
+          style={{ 
+            background: '#ffa502', 
+            color: '#fff', 
+            border: 'none', 
+            padding: '12px 20px', 
+            borderRadius: 8, 
+            cursor: 'pointer',
+            marginTop: 10
+          }}
+        >
+          {diagLoading ? 'Проверяю...' : 'Диагностика БД'}
+        </button>
         
         <button 
           type="button" 

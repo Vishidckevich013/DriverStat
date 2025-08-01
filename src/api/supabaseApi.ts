@@ -180,6 +180,30 @@ export function isRemembered(): boolean {
   return localStorage.getItem('rememberMe') === 'true';
 }
 
+// Диагностика состояния базы данных
+export async function checkDatabaseTables() {
+  console.log('Проверяем состояние таблиц в базе данных...');
+  
+  const tables = ['users', 'shifts', 'settings'];
+  const results: Record<string, any> = {};
+  
+  for (const table of tables) {
+    try {
+      const { data, error } = await supabase.from(table).select('*').limit(1);
+      if (error) {
+        results[table] = { status: 'error', error: error.message, code: error.code };
+      } else {
+        results[table] = { status: 'ok', count: data?.length || 0 };
+      }
+    } catch (e) {
+      results[table] = { status: 'exception', error: (e as Error).message };
+    }
+  }
+  
+  console.log('Результаты проверки таблиц:', results);
+  return results;
+}
+
 // Получить все смены пользователя
 export async function getShifts(user_id: string) {
   const { data, error } = await supabase
@@ -222,6 +246,19 @@ export async function clearShifts(user_id: string) {
 export async function getSettings(user_id: string) {
   console.log('API getSettings: Получаем настройки для пользователя:', user_id);
   
+  // Сначала проверим, что таблица settings существует
+  const { error: tableError } = await supabase
+    .from('settings')
+    .select('count')
+    .limit(1);
+    
+  if (tableError) {
+    console.error('API getSettings: Ошибка доступа к таблице settings:', tableError);
+    if (tableError.code === '42P01') {
+      throw new Error('Таблица settings не существует. Выполните SQL-скрипт в Supabase SQL Editor');
+    }
+  }
+  
   const { data, error } = await supabase
     .from('settings')
     .select('*')
@@ -230,6 +267,7 @@ export async function getSettings(user_id: string) {
     
   if (error && error.code !== 'PGRST116') {
     console.error('API getSettings: Ошибка при получении настроек:', error);
+    console.error('JSON ошибки:', JSON.stringify(error, null, 2));
     throw error;
   }
   
@@ -248,22 +286,24 @@ export async function saveSettings(user_id: string, settings: any) {
     .upsert([{ ...settings, user_id }], { onConflict: 'user_id' });
     
   if (error) {
-    console.error('API saveSettings: Ошибка при сохранении настроек:', error);
-    console.error('API saveSettings: Подробности ошибки:', {
-      message: error.message,
-      details: error.details,
-      hint: error.hint,
-      code: error.code
-    });
+    console.error('API saveSettings: Ошибка при сохранении настроек:');
+    console.error('Тип ошибки:', typeof error);
+    console.error('Ошибка полностью:', error);
+    console.error('JSON ошибки:', JSON.stringify(error, null, 2));
+    
+    if (error.message) console.error('Message:', error.message);
+    if (error.code) console.error('Code:', error.code);
+    if (error.details) console.error('Details:', error.details);
+    if (error.hint) console.error('Hint:', error.hint);
     
     // Более понятные ошибки для пользователя
-    if (error.code === 'PGRST204' && error.message.includes('column')) {
+    if (error.code === 'PGRST204' && error.message && error.message.includes('column')) {
       throw new Error('Структура базы данных устарела. Выполните скрипт fix-settings-table.sql в Supabase SQL Editor');
     } else if (error.code === '42P01') {
       throw new Error('Таблица settings не существует. Выполните полный SQL-скрипт в Supabase SQL Editor');
     }
     
-    throw error;
+    throw new Error(`Ошибка сохранения настроек: ${error.message || JSON.stringify(error)}`);
   }
   
   console.log('API saveSettings: Настройки успешно сохранены:', data);
