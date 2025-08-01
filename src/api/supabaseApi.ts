@@ -12,11 +12,15 @@ export interface User {
 // Авторизация
 export async function signUp(email: string, password: string, name: string, username: string): Promise<User> {
   // Проверяем, не занят ли логин
-  const { data: existingUser } = await supabase
+  const { data: existingUser, error: searchError } = await supabase
     .from('users')
     .select('username')
     .eq('username', username)
     .single();
+    
+  if (searchError && searchError.code !== 'PGRST116') {
+    console.error('Ошибка проверки логина:', searchError);
+  }
     
   if (existingUser) {
     throw new Error('Логин уже занят');
@@ -36,7 +40,7 @@ export async function signUp(email: string, password: string, name: string, user
   if (error) throw error;
   if (!data.user) throw new Error('Ошибка создания пользователя');
   
-  // Сохраняем пользователя в таблицу users для поиска по логину
+  // Пытаемся сохранить пользователя в таблицу users (если триггер не сработал)
   const { error: insertError } = await supabase
     .from('users')
     .insert([{
@@ -46,7 +50,8 @@ export async function signUp(email: string, password: string, name: string, user
       username: username
     }]);
     
-  if (insertError) {
+  // Игнорируем ошибку дублирования (если триггер уже создал запись)
+  if (insertError && !insertError.message.includes('duplicate key')) {
     console.error('Ошибка сохранения пользователя:', insertError);
   }
   
@@ -64,13 +69,13 @@ export async function signIn(loginOrEmail: string, password: string, rememberMe:
   
   // Если это не email, ищем email по логину
   if (!loginOrEmail.includes('@')) {
-    const { data: userData } = await supabase
+    const { data: userData, error: searchError } = await supabase
       .from('users')
       .select('email')
       .eq('username', loginOrEmail)
       .single();
       
-    if (!userData) {
+    if (searchError || !userData) {
       throw new Error('Пользователь с таким логином не найден');
     }
     email = userData.email;
@@ -81,7 +86,10 @@ export async function signIn(loginOrEmail: string, password: string, rememberMe:
     password,
   });
   
-  if (error) throw error;
+  if (error) {
+    console.error('Ошибка авторизации:', error);
+    throw new Error('Неверный логин/email или пароль');
+  }
   if (!data.user) throw new Error('Ошибка авторизации');
   
   // Если "Запомнить меня", сохраняем в localStorage
@@ -92,17 +100,29 @@ export async function signIn(loginOrEmail: string, password: string, rememberMe:
   }
   
   // Получаем данные пользователя из таблицы users
-  const { data: userInfo } = await supabase
+  const { data: userInfo, error: userError } = await supabase
     .from('users')
     .select('*')
     .eq('id', data.user.id)
     .single();
   
+  if (userError) {
+    console.error('Ошибка получения данных пользователя:', userError);
+    // Fallback: используем данные из auth.users
+    return {
+      id: data.user.id,
+      email: data.user.email!,
+      name: data.user.user_metadata?.name || 'Пользователь',
+      username: data.user.user_metadata?.username || '',
+      created_at: data.user.created_at!
+    };
+  }
+  
   return {
     id: data.user.id,
     email: data.user.email!,
-    name: userInfo?.name || data.user.user_metadata?.name || 'Пользователь',
-    username: userInfo?.username || data.user.user_metadata?.username || '',
+    name: userInfo.name || data.user.user_metadata?.name || 'Пользователь',
+    username: userInfo.username || data.user.user_metadata?.username || '',
     created_at: data.user.created_at!
   };
 }
@@ -114,24 +134,46 @@ export async function signOut() {
 }
 
 export async function getCurrentUser(): Promise<User | null> {
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) return null;
-  
-  // Получаем данные пользователя из таблицы users
-  const { data: userInfo } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-  
-  return {
-    id: user.id,
-    email: user.email!,
-    name: userInfo?.name || user.user_metadata?.name || 'Пользователь',
-    username: userInfo?.username || user.user_metadata?.username || '',
-    created_at: user.created_at!
-  };
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    
+    if (error) {
+      console.error('Ошибка получения текущего пользователя:', error);
+      return null;
+    }
+    
+    if (!user) return null;
+    
+    // Получаем данные пользователя из таблицы users
+    const { data: userInfo, error: userError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+    
+    if (userError) {
+      console.error('Ошибка получения данных пользователя из таблицы users:', userError);
+      // Fallback: используем данные из auth.users
+      return {
+        id: user.id,
+        email: user.email!,
+        name: user.user_metadata?.name || 'Пользователь',
+        username: user.user_metadata?.username || '',
+        created_at: user.created_at!
+      };
+    }
+    
+    return {
+      id: user.id,
+      email: user.email!,
+      name: userInfo.name || user.user_metadata?.name || 'Пользователь',
+      username: userInfo.username || user.user_metadata?.username || '',
+      created_at: user.created_at!
+    };
+  } catch (error) {
+    console.error('Ошибка в getCurrentUser:', error);
+    return null;
+  }
 }
 
 export function isRemembered(): boolean {

@@ -32,7 +32,9 @@ function App() {
     // Проверяем, авторизован ли пользователь при загрузке
     const checkUser = async () => {
       try {
+        console.log('Проверяем текущего пользователя...');
         const currentUser = await getCurrentUser();
+        console.log('Текущий пользователь:', currentUser);
         setUser(currentUser);
       } catch (error) {
         console.error('Ошибка проверки пользователя:', error);
@@ -48,9 +50,12 @@ function App() {
     setAuthLoading(true);
     setAuthError('');
     try {
+      console.log('Попытка входа с:', { loginOrEmail, rememberMe });
       const user = await signIn(loginOrEmail, password, rememberMe);
+      console.log('Успешный вход:', user);
       setUser(user);
     } catch (error: any) {
+      console.error('Ошибка входа:', error);
       setAuthError(error.message || 'Ошибка входа');
     } finally {
       setAuthLoading(false);
@@ -61,9 +66,12 @@ function App() {
     setAuthLoading(true);
     setAuthError('');
     try {
+      console.log('Попытка регистрации с:', { email, name, username });
       const user = await signUp(email, password, name, username);
+      console.log('Успешная регистрация:', user);
       setUser(user);
     } catch (error: any) {
+      console.error('Ошибка регистрации:', error);
       setAuthError(error.message || 'Ошибка регистрации');
     } finally {
       setAuthLoading(false);
