@@ -1,7 +1,8 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { getSettings, saveSettings, getCurrentUser, checkDatabaseTables, refreshSupabaseSchema } from '../api/supabaseApi';
+import { getSettings, saveSettings, getCurrentUser } from '../api/supabaseApi';
+// import { checkDatabaseTables, refreshSupabaseSchema } from '../api/supabaseApi';
 import NotificationModal from '../components/NotificationModal';
 
 interface SettingsProps {
@@ -27,12 +28,12 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string>('');
-  const [diagLoading, setDiagLoading] = useState(false);
+  // const [diagLoading, setDiagLoading] = useState(false);
   
   // Состояния для модальных окон
   const [showNotification, setShowNotification] = useState(false);
   const [notification, setNotification] = useState({ title: '', message: '', type: 'info' as any });
-  const [refreshLoading, setRefreshLoading] = useState(false);
+  // const [refreshLoading, setRefreshLoading] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -97,6 +98,7 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
     }
   };
 
+  /* Технические функции скрыты для обычных пользователей
   const handleDiagnose = async () => {
     setDiagLoading(true);
     try {
@@ -152,6 +154,7 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
       setRefreshLoading(false);
     }
   };
+  */
 
   if (loading) {
     return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
@@ -233,6 +236,8 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
         <button type="submit" disabled={loading}>{loading ? 'Сохраняю...' : 'Сохранить'}</button>
         {saved && <div style={{ color: '#6c4aff', marginTop: 8 }}>Настройки сохранены!</div>}
         
+        {/* Технические кнопки скрыты для обычных пользователей */}
+        {/* 
         <div style={{ display: 'flex', gap: 10, marginTop: 15 }}>
           <button 
             type="button" 
@@ -270,6 +275,7 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
             {refreshLoading ? 'Обновляю...' : 'Обновить схему'}
           </button>
         </div>
+        */}
         
         <button 
           type="button" 
