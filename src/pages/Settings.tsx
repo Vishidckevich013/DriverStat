@@ -59,18 +59,26 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    
+    const settingsData = {
+      orderPrice: parseFloat(orderPrice.replace(',', '.')),
+      fuelPrice: parseFloat(fuelPrice.replace(',', '.')),
+      fuelRate: parseFloat(fuelRate.replace(',', '.')),
+      minSalaryEnabled,
+      minSalaryDay: parseFloat(minSalaryDay.replace(',', '.')),
+      minSalaryEvening: parseFloat(minSalaryEvening.replace(',', '.')),
+    };
+    
+    console.log('Settings: Отправляем настройки на сохранение:', settingsData);
+    console.log('Settings: ID пользователя:', userId);
+    
     try {
-      await saveSettings(userId, {
-        orderPrice: parseFloat(orderPrice.replace(',', '.')),
-        fuelPrice: parseFloat(fuelPrice.replace(',', '.')),
-        fuelRate: parseFloat(fuelRate.replace(',', '.')),
-        minSalaryEnabled,
-        minSalaryDay: parseFloat(minSalaryDay.replace(',', '.')),
-        minSalaryEvening: parseFloat(minSalaryEvening.replace(',', '.')),
-      });
+      await saveSettings(userId, settingsData);
+      console.log('Settings: Настройки успешно сохранены');
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (e) {
+      console.error('Settings: Ошибка при сохранении настроек:', e);
       alert('Ошибка при сохранении настроек!');
     } finally {
       setLoading(false);

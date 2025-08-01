@@ -14,20 +14,33 @@ const Shifts = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        console.log('Shifts: Получаем текущего пользователя...');
         const user = await getCurrentUser();
         if (!user) {
-          console.error('Пользователь не авторизован');
+          console.error('Shifts: Пользователь не авторизован');
           return;
         }
+        console.log('Shifts: Пользователь найден:', user.id);
         setUserId(user.id);
 
+        console.log('Shifts: Загружаем смены и настройки...');
         const [shiftsData, settingsData] = await Promise.all([
           getShifts(user.id),
           getSettings(user.id),
         ]);
+        
+        console.log('Shifts: Полученные смены:', shiftsData);
+        console.log('Shifts: Полученные настройки:', settingsData);
+        
         setShifts(shiftsData || []);
-        setSettings(settingsData || {});
+        
+        // Используем настройки по умолчанию если их нет в базе
+        const defaultSettings = { orderPrice: 100, fuelPrice: 60, fuelRate: 10, minSalaryEnabled: false, minSalaryDay: 65, minSalaryEvening: 35 };
+        setSettings(settingsData || defaultSettings);
+        
+        console.log('Shifts: Итоговые настройки для расчетов:', settingsData || defaultSettings);
       } catch (e) {
+        console.error('Shifts: Ошибка загрузки данных:', e);
         alert('Ошибка загрузки данных!');
       } finally {
         setLoading(false);
@@ -75,8 +88,8 @@ const Shifts = () => {
         salary = minSalary;
       }
     }
-    salary = salary + fuelCost;
-    return salary;
+    // Заработок = зарплата - топливо (а не плюс!)
+    return salary - fuelCost;
   };
 
   if (loading) {

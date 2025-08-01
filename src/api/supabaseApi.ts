@@ -220,21 +220,44 @@ export async function clearShifts(user_id: string) {
 
 // Получить настройки пользователя
 export async function getSettings(user_id: string) {
+  console.log('API getSettings: Получаем настройки для пользователя:', user_id);
+  
   const { data, error } = await supabase
     .from('settings')
     .select('*')
     .eq('user_id', user_id)
     .single();
-  if (error && error.code !== 'PGRST116') throw error;
+    
+  if (error && error.code !== 'PGRST116') {
+    console.error('API getSettings: Ошибка при получении настроек:', error);
+    throw error;
+  }
+  
+  console.log('API getSettings: Полученные настройки:', data);
   return data;
 }
 
 // Сохранить/обновить настройки пользователя
 export async function saveSettings(user_id: string, settings: any) {
+  console.log('API saveSettings: Сохраняем настройки для пользователя:', user_id);
+  console.log('API saveSettings: Данные настроек:', settings);
+  
   // upsert: если есть — обновит, если нет — создаст
   const { data, error } = await supabase
     .from('settings')
     .upsert([{ ...settings, user_id }], { onConflict: 'user_id' });
-  if (error) throw error;
+    
+  if (error) {
+    console.error('API saveSettings: Ошибка при сохранении настроек:', error);
+    console.error('API saveSettings: Подробности ошибки:', {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code
+    });
+    throw error;
+  }
+  
+  console.log('API saveSettings: Настройки успешно сохранены:', data);
   return data;
 }
