@@ -18,13 +18,13 @@ DROP POLICY IF EXISTS "Allow username lookup for login" ON public.users;
 
 -- Политика: пользователи могут читать и изменять только свои данные
 CREATE POLICY "Users can read own data" ON public.users
-    FOR SELECT USING (auth.uid() = id);
+    FOR SELECT USING ((auth.uid())::text = (id)::text);
 
 CREATE POLICY "Users can insert own data" ON public.users
-    FOR INSERT WITH CHECK (auth.uid() = id);
+    FOR INSERT WITH CHECK ((auth.uid())::text = (id)::text);
 
 CREATE POLICY "Users can update own data" ON public.users
-    FOR UPDATE USING (auth.uid() = id);
+    FOR UPDATE USING ((auth.uid())::text = (id)::text);
 
 -- Политика для поиска email по логину (нужна для авторизации)
 -- Разрешаем всем читать username и email для авторизации
@@ -101,16 +101,16 @@ DROP POLICY IF EXISTS "Users can delete own shifts" ON public.shifts;
 
 -- Политики для таблицы shifts
 CREATE POLICY "Users can read own shifts" ON public.shifts
-    FOR SELECT USING (auth.uid() = user_id);
+    FOR SELECT USING ((auth.uid())::text = (user_id)::text);
 
 CREATE POLICY "Users can insert own shifts" ON public.shifts
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+    FOR INSERT WITH CHECK ((auth.uid())::text = (user_id)::text);
 
 CREATE POLICY "Users can update own shifts" ON public.shifts
-    FOR UPDATE USING (auth.uid() = user_id);
+    FOR UPDATE USING ((auth.uid())::text = (user_id)::text);
 
 CREATE POLICY "Users can delete own shifts" ON public.shifts
-    FOR DELETE USING (auth.uid() = user_id);
+    FOR DELETE USING ((auth.uid())::text = (user_id)::text);
 
 -- Удаляем старые политики для settings
 DROP POLICY IF EXISTS "Users can read own settings" ON public.settings;
@@ -119,13 +119,13 @@ DROP POLICY IF EXISTS "Users can update own settings" ON public.settings;
 
 -- Политики для таблицы settings
 CREATE POLICY "Users can read own settings" ON public.settings
-    FOR SELECT USING (auth.uid() = user_id);
+    FOR SELECT USING ((auth.uid())::text = (user_id)::text);
 
 CREATE POLICY "Users can insert own settings" ON public.settings
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+    FOR INSERT WITH CHECK ((auth.uid())::text = (user_id)::text);
 
 CREATE POLICY "Users can update own settings" ON public.settings
-    FOR UPDATE USING (auth.uid() = user_id);
+    FOR UPDATE USING ((auth.uid())::text = (user_id)::text);
 
 -- Индексы для оптимизации
 CREATE INDEX IF NOT EXISTS idx_shifts_user_id ON public.shifts(user_id);
