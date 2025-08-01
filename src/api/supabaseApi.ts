@@ -316,6 +316,44 @@ export async function addShift(user_id: string, shift: Omit<any, 'id' | 'user_id
   return data;
 }
 
+// Удалить одну смену
+export async function deleteShift(user_id: string, shift_id: number) {
+  console.log('API deleteShift: Удаляем смену:', shift_id, 'для пользователя:', user_id);
+  
+  const { error } = await supabase
+    .from('shifts')
+    .delete()
+    .eq('id', shift_id)
+    .eq('user_id', user_id);
+    
+  if (error) {
+    console.error('API deleteShift: Ошибка при удалении смены:', error);
+    throw error;
+  }
+  
+  console.log('API deleteShift: Смена успешно удалена');
+}
+
+// Обновить смену
+export async function updateShift(user_id: string, shift_id: number, shift: Partial<any>) {
+  console.log('API updateShift: Обновляем смену:', shift_id, 'для пользователя:', user_id);
+  console.log('API updateShift: Новые данные:', shift);
+  
+  const { data, error } = await supabase
+    .from('shifts')
+    .update(shift)
+    .eq('id', shift_id)
+    .eq('user_id', user_id);
+    
+  if (error) {
+    console.error('API updateShift: Ошибка при обновлении смены:', error);
+    throw error;
+  }
+  
+  console.log('API updateShift: Смена успешно обновлена:', data);
+  return data;
+}
+
 // Очистить все смены пользователя
 export async function clearShifts(user_id: string) {
   const { error } = await supabase

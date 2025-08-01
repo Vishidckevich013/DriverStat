@@ -46,6 +46,26 @@ function App() {
     checkUser();
   }, []);
 
+  // Обработка hash-навигации
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1); // убираем #
+      if (hash && ['add', 'shifts', 'analytics', 'settings'].includes(hash)) {
+        setPage(hash as Page);
+      }
+    };
+
+    // Проверяем hash при загрузке
+    handleHashChange();
+    
+    // Слушаем изменения hash
+    window.addEventListener('hashchange', handleHashChange);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
   const handleLogin = async (loginOrEmail: string, password: string, rememberMe: boolean) => {
     setAuthLoading(true);
     setAuthError('');
@@ -129,10 +149,10 @@ function App() {
           Добро пожаловать, {user.name}!
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18, width: 260 }}>
-          <button className="tg-btn" onClick={() => setPage('add')}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconPlus /></span> Добавить смену</button>
-          <button className="tg-btn" onClick={() => setPage('shifts')}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconHistory /></span> История</button>
-          <button className="tg-btn" onClick={() => setPage('analytics')}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconAnalytics /></span> Аналитика</button>
-          <button className="tg-btn" onClick={() => setPage('settings')}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconSettings /></span> Настройки</button>
+          <button className="tg-btn" onClick={() => { setPage('add'); window.location.hash = 'add'; }}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconPlus /></span> Добавить смену</button>
+          <button className="tg-btn" onClick={() => { setPage('shifts'); window.location.hash = 'shifts'; }}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconHistory /></span> История</button>
+          <button className="tg-btn" onClick={() => { setPage('analytics'); window.location.hash = 'analytics'; }}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconAnalytics /></span> Аналитика</button>
+          <button className="tg-btn" onClick={() => { setPage('settings'); window.location.hash = 'settings'; }}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconSettings /></span> Настройки</button>
         </div>
       </div>
     );
@@ -141,7 +161,7 @@ function App() {
   return (
     <div className="tg-app" style={{ minHeight: '100vh', background: '#181c2f', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', maxWidth: 400, margin: '0 auto', padding: '24px 0 12px 0' }}>
-        <button onClick={() => setPage('home')} style={{ background: 'none', border: 'none', color: '#6c4aff', fontSize: 22, cursor: 'pointer', marginRight: 12, display:'flex', alignItems:'center' }}>
+        <button onClick={() => { setPage('home'); window.location.hash = ''; }} style={{ background: 'none', border: 'none', color: '#6c4aff', fontSize: 22, cursor: 'pointer', marginRight: 12, display:'flex', alignItems:'center' }}>
           <IconBack />
         </button>
         <h2 style={{ margin: 0, color: '#fff', fontWeight: 600 }}>{title}</h2>

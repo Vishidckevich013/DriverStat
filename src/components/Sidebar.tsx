@@ -25,7 +25,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, current }) => (
           <li
             key={item.page}
             className={current === item.page ? 'active' : ''}
-            onClick={() => onNavigate(item.page)}
+            onClick={() => {
+              onNavigate(item.page);
+              window.location.hash = item.page;
+            }}
           >
             <span className="icon">{item.icon}</span>
             <span className="label">{item.label}</span>

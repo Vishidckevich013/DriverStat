@@ -129,6 +129,39 @@ const AddShift = () => {
       )}
       <button type="submit" disabled={loading}>{loading ? 'Сохраняю...' : 'Сохранить смену'}</button>
       {success && <div style={{ color: '#6c4aff', marginTop: 8 }}>Смена добавлена!</div>}
+      
+      <div style={{ 
+        marginTop: 20, 
+        padding: 12, 
+        background: '#2a2f3a', 
+        borderRadius: 8, 
+        border: '1px solid #35363f',
+        textAlign: 'center'
+      }}>
+        <p style={{ 
+          color: '#bfc1c7', 
+          fontSize: '0.9em', 
+          margin: '0 0 8px 0',
+          opacity: 0.8
+        }}>
+          Можете изменить тарифы и настройки расчетов
+        </p>
+        <button
+          type="button"
+          onClick={() => window.location.hash = 'settings'}
+          style={{
+            background: 'transparent',
+            color: '#6c4aff',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '0.9em',
+            textDecoration: 'underline',
+            padding: 0
+          }}
+        >
+          Перейти в настройки
+        </button>
+      </div>
     </form>
   );
 };
