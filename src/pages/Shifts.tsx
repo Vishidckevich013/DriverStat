@@ -227,17 +227,21 @@ const Shifts = () => {
           </button>
         </div>
       ) : (
-        <table style={{ width: '100%', background: '#23284a', borderRadius: 12, padding: 8, color: '#fff', marginTop: 16 }}>
-          <thead>
-            <tr>
-              <th>Дата</th>
-              {settings.minSalaryEnabled && <th>Тип</th>}
-              <th>Заказы</th>
-              <th>Пробег (км)</th>
-              <th>Зарплата (₽)</th>
-              <th>Топливо (₽)</th>
-              <th>Общий доход (₽)</th>
-              <th>Действия</th>
+        <div className="table-container">
+          <div className="mobile-table-header">
+            История смен ({shifts.length})
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                {settings.minSalaryEnabled && <th>Тип</th>}
+                <th>Заказы</th>
+                <th>Пробег</th>
+                <th>Зарплата</th>
+                <th>Топливо</th>
+                <th>Доход</th>
+                <th>Действия</th>
             </tr>
           </thead>
           <tbody>
@@ -351,6 +355,7 @@ const Shifts = () => {
             ))}
           </tbody>
         </table>
+      </div>
       )}
 
       {/* Модальное окно подтверждения очистки истории */}

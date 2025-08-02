@@ -9,6 +9,7 @@ import Shifts from './pages/Shifts';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import AuthForm from './components/AuthForm';
+import Sidebar from './components/Sidebar';
 import { IconPlus, IconHistory, IconAnalytics, IconSettings, IconBack } from './components/icons';
 import { signUp, signIn, signOut, getCurrentUser, type User } from './api/supabaseApi';
 
@@ -143,32 +144,115 @@ function App() {
 
   if (page === 'home') {
     return (
-      <div className="tg-app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#181c2f' }}>
-        <h1 style={{ color: '#6c4aff', marginBottom: 32 }}>DRIVER STAT</h1>
-        <div style={{ color: '#bfc1c7', marginBottom: 24, fontSize: '1.1em' }}>
-          Добро пожаловать, {user.name}!
+      <div style={{ display: 'flex', minHeight: '100vh', background: '#181c2f' }}>
+        {/* Sidebar - скрыт на мобильных, виден на планшетах и десктопах */}
+        <div className="sidebar-desktop">
+          <Sidebar onNavigate={(newPage) => { setPage(newPage); window.location.hash = newPage; }} current={page} />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18, width: 260 }}>
-          <button className="tg-btn" onClick={() => { setPage('add'); window.location.hash = 'add'; }}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconPlus /></span> Добавить смену</button>
-          <button className="tg-btn" onClick={() => { setPage('shifts'); window.location.hash = 'shifts'; }}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconHistory /></span> История</button>
-          <button className="tg-btn" onClick={() => { setPage('analytics'); window.location.hash = 'analytics'; }}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconAnalytics /></span> Аналитика</button>
-          <button className="tg-btn" onClick={() => { setPage('settings'); window.location.hash = 'settings'; }}><span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconSettings /></span> Настройки</button>
+        
+        {/* Основной контент */}
+        <div className="main-content" style={{ 
+          flex: 1, 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          padding: '20px',
+          paddingBottom: '100px', // Место для мобильного сайдбара
+          minHeight: '100vh'
+        }}>
+          <h1 style={{ color: '#6c4aff', marginBottom: 32, textAlign: 'center' }}>DRIVER STAT</h1>
+          <div style={{ color: '#bfc1c7', marginBottom: 24, fontSize: '1.1em', textAlign: 'center' }}>
+            Добро пожаловать, {user.name}!
+          </div>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 18, 
+            width: '100%',
+            maxWidth: '300px'
+          }}>
+            <button className="tg-btn" onClick={() => { setPage('add'); window.location.hash = 'add'; }}>
+              <span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconPlus /></span> 
+              Добавить смену
+            </button>
+            <button className="tg-btn" onClick={() => { setPage('shifts'); window.location.hash = 'shifts'; }}>
+              <span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconHistory /></span> 
+              История
+            </button>
+            <button className="tg-btn" onClick={() => { setPage('analytics'); window.location.hash = 'analytics'; }}>
+              <span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconAnalytics /></span> 
+              Аналитика
+            </button>
+            <button className="tg-btn" onClick={() => { setPage('settings'); window.location.hash = 'settings'; }}>
+              <span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconSettings /></span> 
+              Настройки
+            </button>
+          </div>
         </div>
+        
+        {/* Мобильный сайдбар внизу */}
+        <Sidebar onNavigate={(newPage) => { setPage(newPage); window.location.hash = newPage; }} current={page} />
       </div>
     );
   }
 
   return (
-    <div className="tg-app" style={{ minHeight: '100vh', background: '#181c2f', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%', maxWidth: 400, margin: '0 auto', padding: '24px 0 12px 0' }}>
-        <button onClick={() => { setPage('home'); window.location.hash = ''; }} style={{ background: 'none', border: 'none', color: '#6c4aff', fontSize: 22, cursor: 'pointer', marginRight: 12, display:'flex', alignItems:'center' }}>
-          <IconBack />
-        </button>
-        <h2 style={{ margin: 0, color: '#fff', fontWeight: 600 }}>{title}</h2>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#181c2f' }}>
+      {/* Sidebar - скрыт на мобильных, виден на планшетах и десктопах */}
+      <div className="sidebar-desktop">
+        <Sidebar onNavigate={(newPage) => { setPage(newPage); window.location.hash = newPage; }} current={page} />
       </div>
-      <div style={{ width: '100%', maxWidth: 400, margin: '0 auto', flex: 1 }}>
-        {content}
+      
+      {/* Основной контент */}
+      <div className="main-content" style={{ 
+        flex: 1, 
+        display: 'flex', 
+        flexDirection: 'column',
+        paddingBottom: '100px', // Место для мобильного сайдбара
+        minHeight: '100vh'
+      }}>
+        {/* Заголовок с кнопкой назад */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          width: '100%', 
+          padding: '20px',
+          borderBottom: '1px solid #2d2f36'
+        }}>
+          <button 
+            onClick={() => { setPage('home'); window.location.hash = ''; }} 
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              color: '#6c4aff', 
+              fontSize: 22, 
+              cursor: 'pointer', 
+              marginRight: 12, 
+              display:'flex', 
+              alignItems:'center',
+              padding: '8px'
+            }}
+          >
+            <IconBack />
+          </button>
+          <h2 style={{ margin: 0, color: '#fff', fontWeight: 600, fontSize: 'clamp(1.2em, 4vw, 1.5em)' }}>
+            {title}
+          </h2>
+        </div>
+        
+        {/* Контент страницы */}
+        <div style={{ 
+          flex: 1, 
+          padding: '20px',
+          overflow: 'auto'
+        }}>
+          {content}
+        </div>
       </div>
+      
+      {/* Мобильный сайдбар внизу */}
+      <Sidebar onNavigate={(newPage) => { setPage(newPage); window.location.hash = newPage; }} current={page} />
     </div>
   );
 }

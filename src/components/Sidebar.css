@@ -1,57 +1,206 @@
 
+/* Мобильный подход - сначала мобильные стили */
 .sidebar {
   background: #23262e;
   color: #f3f4f6;
-  width: 240px;
-  min-height: 100vh;
+  width: 100%;
+  min-height: auto;
   display: flex;
-  flex-direction: column;
-  padding: 36px 0 24px 0;
-  box-shadow: 2px 0 24px #0004;
-  position: relative;
-  border-right: 1.5px solid #2d2f36;
+  flex-direction: row;
+  padding: 12px 0;
+  box-shadow: 0 2px 12px #0004;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1.5px solid #2d2f36;
+  z-index: 1000;
+  overflow-x: auto;
 }
+
+/* Логотип скрыт на мобильных */
 .logo {
-  font-size: 1.6rem;
-  font-weight: bold;
-  margin-bottom: 40px;
-  text-align: center;
-  letter-spacing: 2px;
-  color: #fff;
-  text-shadow: 0 2px 8px #0006;
+  display: none;
 }
+
+/* Меню в виде горизонтальной полосы на мобильных */
+.menu {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .menu ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
 }
+
 .menu li {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
-  padding: 14px 38px;
+  gap: 4px;
+  padding: 8px 12px;
   cursor: pointer;
-  border-radius: 12px;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
   font-weight: 500;
   transition: background 0.18s, color 0.18s, box-shadow 0.18s;
   opacity: 0.93;
   border: none;
   outline: none;
+  min-width: 0;
+  flex: 1;
+  text-align: center;
 }
+
 .menu li.active, .menu li:hover {
-  background: linear-gradient(90deg, #2d2f36 70%, #6c4aff22 100%);
+  background: linear-gradient(180deg, #2d2f36 0%, #6c4aff22 100%);
   color: #6c4aff;
   opacity: 1;
   box-shadow: 0 2px 12px #0002;
 }
+
 .menu li .icon {
-  font-size: 1.25rem;
-  width: 28px;
+  font-size: 1.2rem;
+  width: auto;
   text-align: center;
 }
+
 .menu li .label {
-  flex: 1;
-  letter-spacing: 0.5px;
+  font-size: 0.7rem;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Планшетные стили */
+@media (min-width: 768px) {
+  .sidebar {
+    width: 200px !important;
+    min-height: 100vh !important;
+    flex-direction: column !important;
+    padding: 24px 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: auto !important;
+    right: auto !important;
+    border-top: none !important;
+    border-right: 1.5px solid #2d2f36 !important;
+  }
+
+  .logo {
+    display: block !important;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 2px 8px #0006;
+  }
+
+  .menu {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .menu ul {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .menu li {
+    flex-direction: row !important;
+    gap: 12px !important;
+    padding: 12px 24px !important;
+    margin-bottom: 6px !important;
+    font-size: 1rem !important;
+    justify-content: flex-start !important;
+  }
+
+  .menu li .icon {
+    font-size: 1.1rem !important;
+    width: 24px !important;
+  }
+
+  .menu li .label {
+    font-size: 1rem !important;
+    white-space: normal !important;
+    flex: 1 !important;
+    text-align: left !important;
+  }
+}
+
+/* Десктопные стили */
+@media (min-width: 1024px) {
+  .sidebar {
+    width: 240px !important;
+    min-height: 100vh !important;
+    flex-direction: column !important;
+    padding: 36px 0 24px 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: auto !important;
+    right: auto !important;
+    border-top: none !important;
+    border-right: 1.5px solid #2d2f36 !important;
+  }
+
+  .logo {
+    display: block !important;
+    font-size: 1.6rem !important;
+    font-weight: bold;
+    margin-bottom: 40px !important;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 2px 8px #0006;
+  }
+
+  .menu {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .menu ul {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .menu li {
+    flex-direction: row !important;
+    gap: 14px !important;
+    padding: 14px 38px !important;
+    margin-bottom: 8px !important;
+    font-size: 1.1rem !important;
+    justify-content: flex-start !important;
+  }
+
+  .menu li.active, .menu li:hover {
+    background: linear-gradient(90deg, #2d2f36 70%, #6c4aff22 100%) !important;
+  }
+
+  .menu li .icon {
+    font-size: 1.25rem !important;
+    width: 28px !important;
+  }
+
+  .menu li .label {
+    font-size: 1.1rem !important;
+    white-space: normal !important;
+    flex: 1 !important;
+    letter-spacing: 0.5px !important;
+    text-align: left !important;
+  }
 }

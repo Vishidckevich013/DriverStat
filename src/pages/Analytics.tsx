@@ -87,7 +87,7 @@ const Analytics = () => {
   return (
     <div>
       <h2>Аналитика</h2>
-      <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
+      <div className="date-filters">
         <label>
           С:
           <input type="date" value={from} onChange={e => setFrom(e.target.value)} />
@@ -100,7 +100,7 @@ const Analytics = () => {
       {filtered.length === 0 ? (
         <p style={{ color: '#bfc1c7' }}>Нет данных за выбранный период.</p>
       ) : (
-        <div style={{ background: '#23284a', borderRadius: 12, padding: 20, color: '#fff', maxWidth: 400, margin: '0 auto' }}>
+        <div className="analytics-card">
           <div style={{ marginBottom: 10 }}>Всего смен: <b>{filtered.length}</b></div>
           <div>Всего заказов: <b>{totalOrders}</b></div>
           <div>Суммарный пробег: <b>{totalDistance.toFixed(2)} км</b></div>

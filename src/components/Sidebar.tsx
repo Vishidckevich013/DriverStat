@@ -1,16 +1,17 @@
 import React from 'react';
 import './Sidebar.css';
 
-type Page = 'shifts' | 'add' | 'settings';
+type Page = 'shifts' | 'add' | 'settings' | 'analytics' | 'home';
 
 interface SidebarProps {
-  onNavigate: (page: Page) => void;
+  onNavigate: (page: Exclude<Page, 'home'>) => void;
   current: Page;
 }
 
-const menuItems: { icon: string; label: string; page: Page }[] = [
-  { icon: '�', label: 'Смены', page: 'shifts' },
-  { icon: '➕', label: 'Добавить смену', page: 'add' },
+const menuItems: { icon: string; label: string; page: Exclude<Page, 'home'> }[] = [
+  { icon: '📊', label: 'История', page: 'shifts' },
+  { icon: '➕', label: 'Добавить', page: 'add' },
+  { icon: '📈', label: 'Аналитика', page: 'analytics' },
   { icon: '⚙️', label: 'Настройки', page: 'settings' },
 ];
 
