@@ -285,10 +285,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Исключения для навигационных элементов */
 .sidebar li,
 .menu li,
-.header-actions button {
+.header-actions button,
+.back-button {
   background: inherit !important;
   color: inherit !important;
   border: none !important;
+}
+
+.back-button {
+  background: none !important;
+  color: #6c4aff !important;
+  border: none !important;
+  padding: 8px !important;
+}
+
+.back-button svg {
+  stroke: #6c4aff !important;
 }
 
 .sidebar li.active {
@@ -312,10 +324,31 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .table-container {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-top: 18px;
   border-radius: 14px;
   background: #23262e;
   box-shadow: 0 2px 12px #0003;
+  scrollbar-width: thin;
+  scrollbar-color: #6c4aff #23262e;
+}
+
+.table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #23262e;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #6c4aff;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #5a3fd6;
 }
 
 table {
@@ -324,7 +357,7 @@ table {
   border-spacing: 0;
   font-size: clamp(0.7em, 2vw, 1.05em);
   color: #f3f4f6;
-  min-width: 600px; /* Минимальная ширина для горизонтального скролла */
+  min-width: 700px; /* Увеличенная минимальная ширина для принудительной прокрутки */
 }
 
 @media (min-width: 768px) {
@@ -408,8 +441,19 @@ tr:nth-child(odd) {
   }
 }
 
-/* Мобильные кнопки */
+/* Мобильные стили таблиц */
 @media (max-width: 767px) {
+  .table-container {
+    margin: 0 -16px; /* Расширяем контейнер на всю ширину экрана */
+    border-radius: 0;
+    background: #23262e;
+  }
+  
+  table {
+    min-width: 800px; /* Еще больше минимальная ширина на мобильных */
+    font-size: 0.85em;
+  }
+  
   .table-actions {
     display: flex;
     flex-direction: column;
@@ -420,6 +464,14 @@ tr:nth-child(odd) {
     font-size: 0.8em;
     padding: 4px 8px;
     min-width: 60px;
+  }
+  
+  .mobile-table-header {
+    padding: 12px 16px;
+    background: #1a1d2e;
+    color: #f3f4f6;
+    font-weight: 600;
+    text-align: center;
   }
   
   .sidebar-desktop {

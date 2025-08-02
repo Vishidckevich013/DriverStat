@@ -222,6 +222,7 @@ function App() {
         }}>
           <button 
             onClick={() => { setPage('home'); window.location.hash = ''; }} 
+            className="back-button"
             style={{ 
               background: 'none', 
               border: 'none', 
