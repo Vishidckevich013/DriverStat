@@ -7,7 +7,7 @@ body, html {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Убираем горизонтальный скролл */
+  overflow-x: visible; /* Разрешаем горизонтальный скролл для таблиц */
 }
 
 * {
@@ -323,7 +323,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Адаптивные таблицы */
 .table-container {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: scroll !important;
+  overflow-y: visible;
   -webkit-overflow-scrolling: touch;
   margin-top: 18px;
   border-radius: 14px;
@@ -331,6 +332,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   box-shadow: 0 2px 12px #0003;
   scrollbar-width: thin;
   scrollbar-color: #6c4aff #23262e;
+  touch-action: pan-x;
+  position: relative;
+  /* Принудительная прокрутка */
+  scroll-behavior: auto;
+  -ms-overflow-style: auto;
+}
+
+/* Исправление для WebKit браузеров */
+@supports (-webkit-touch-callout: none) {
+  .table-container {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    will-change: scroll-position;
+  }
 }
 
 .table-container::-webkit-scrollbar {
@@ -357,7 +372,9 @@ table {
   border-spacing: 0;
   font-size: clamp(0.7em, 2vw, 1.05em);
   color: #f3f4f6;
-  min-width: 700px; /* Увеличенная минимальная ширина для принудительной прокрутки */
+  min-width: 800px !important; /* Принудительная минимальная ширина */
+  table-layout: auto; /* Позволяем автоматическое изменение размера */
+  position: relative;
 }
 
 @media (min-width: 768px) {
@@ -443,15 +460,26 @@ tr:nth-child(odd) {
 
 /* Мобильные стили таблиц */
 @media (max-width: 767px) {
+  /* Позволяем прокрутку таблиц на мобильных */
+  body {
+    overflow-x: visible !important;
+  }
+  
   .table-container {
     margin: 0 -16px; /* Расширяем контейнер на всю ширину экрана */
     border-radius: 0;
     background: #23262e;
+    overflow-x: scroll !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    transform: translateZ(0); /* Аппаратное ускорение */
+    will-change: scroll-position;
   }
   
   table {
-    min-width: 800px; /* Еще больше минимальная ширина на мобильных */
+    min-width: 900px !important; /* Еще больше минимальная ширина на мобильных */
     font-size: 0.85em;
+    width: 900px !important; /* Фиксированная ширина для принудительной прокрутки */
   }
   
   .table-actions {
