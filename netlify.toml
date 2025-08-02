@@ -12,8 +12,8 @@
   status = 200
 
 # Настройки для тестовой ветки
-[context.test-branch]
+[context.mobile-responsive-test]
   command = "npm run build"
   
-[context.test-branch.environment]
+[context.mobile-responsive-test.environment]
   NODE_ENV = "development"
