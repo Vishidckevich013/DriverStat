@@ -204,7 +204,12 @@ const Shifts = () => {
   return (
     <div>
       <h2>Все смены</h2>
-      <button onClick={handleClear} disabled={clearLoading} style={{ marginBottom: 16, background: '#35363f', color: '#fff', border: 'none', borderRadius: 7, padding: '8px 16px', cursor: 'pointer' }}>
+      <button 
+        onClick={handleClear} 
+        disabled={clearLoading} 
+        className="clear-btn"
+        style={{ marginBottom: 16, padding: '8px 16px' }}
+      >
         {clearLoading ? 'Очищаю...' : 'Очистить историю'}
       </button>
       {shifts.length === 0 ? (
@@ -293,13 +298,15 @@ const Shifts = () => {
                     <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
                       <button 
                         onClick={handleSaveEdit}
-                        style={{ padding: '4px 8px', background: '#27ae60', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: '0.8em' }}
+                        className="save-btn"
+                        style={{ padding: '4px 8px', fontSize: '0.8em' }}
                       >
                         ✓
                       </button>
                       <button 
                         onClick={handleCancelEdit}
-                        style={{ padding: '4px 8px', background: '#e74c3c', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: '0.8em' }}
+                        className="cancel-btn"
+                        style={{ padding: '4px 8px', fontSize: '0.8em' }}
                       >
                         ✕
                       </button>
