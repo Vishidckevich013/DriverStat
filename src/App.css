@@ -89,6 +89,17 @@ body, html {
   box-shadow: 0 4px 16px #6c4aff33;
 }
 
+/* Белые иконки в главном меню */
+.tg-btn svg {
+  stroke: #ffffff !important;
+  fill: none !important;
+}
+
+.tg-btn span svg {
+  stroke: #ffffff !important;
+  fill: none !important;
+}
+
 form, .user-info, table {
   background: #23262e;
   border-radius: 14px;
@@ -286,10 +297,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .sidebar li,
 .menu li,
 .header-actions button,
-.back-button {
+.back-button,
+.tg-btn {
   background: inherit !important;
   color: inherit !important;
   border: none !important;
+}
+
+/* Восстанавливаем стили для tg-btn */
+.tg-btn {
+  background: #35363f !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.tg-btn:hover {
+  background: #444654 !important;
 }
 
 .back-button {
