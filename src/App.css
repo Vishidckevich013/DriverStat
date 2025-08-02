@@ -148,6 +148,21 @@ button {
   appearance: none;
 }
 
+/* Белые иконки в кнопках */
+button .icon,
+button span.icon {
+  color: #ffffff !important;
+  filter: none !important;
+}
+
+/* Фиксация иконок в навигации */
+.sidebar .icon,
+.menu .icon,
+li .icon {
+  color: inherit !important;
+  filter: none !important;
+}
+
 button:hover:not(:disabled) {
   background: #5a3fd6 !important;
   border-color: #5a3fd6 !important;
@@ -160,10 +175,25 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Специальные стили для кнопок форм */
+form button[type="submit"],
+form button {
+  background: #6c4aff !important;
+  color: #ffffff !important;
+  border: 1px solid #6c4aff !important;
+}
+
+form button[type="submit"]:hover:not(:disabled),
+form button:hover:not(:disabled) {
+  background: #5a3fd6 !important;
+  border-color: #5a3fd6 !important;
+}
+
 /* Специальные стили для кнопок действий */
 button.edit-btn, button.save-btn {
   background: #2563eb !important;
   border-color: #2563eb !important;
+  color: #ffffff !important;
 }
 
 button.edit-btn:hover:not(:disabled), button.save-btn:hover:not(:disabled) {
@@ -174,6 +204,7 @@ button.edit-btn:hover:not(:disabled), button.save-btn:hover:not(:disabled) {
 button.delete-btn, button.cancel-btn {
   background: #dc2626 !important;
   border-color: #dc2626 !important;
+  color: #ffffff !important;
 }
 
 button.delete-btn:hover:not(:disabled), button.cancel-btn:hover:not(:disabled) {
@@ -203,6 +234,37 @@ input, select, textarea {
   appearance: none;
 }
 
+/* Исключение для чекбоксов */
+input[type="checkbox"] {
+  background: #23262e !important;
+  color: #f3f4f6 !important;
+  border: 2px solid #35363f !important;
+  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  position: relative;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type="checkbox"]:checked {
+  background: #6c4aff !important;
+  border-color: #6c4aff !important;
+}
+
+input[type="checkbox"]:checked::before {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff !important;
+  font-size: 12px;
+  font-weight: bold;
+}
+
 input:focus, select:focus, textarea:focus {
   border-color: #6c4aff !important;
   outline: none;
@@ -220,10 +282,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
+/* Исключения для навигационных элементов */
+.sidebar li,
+.menu li,
+.header-actions button {
+  background: inherit !important;
+  color: inherit !important;
+  border: none !important;
+}
+
+.sidebar li.active {
+  background: #6c4aff !important;
+  color: #ffffff !important;
+}
+
+.sidebar li.active .icon {
+  color: #ffffff !important;
+}
+
 /* Стили для мобильных WebKit браузеров */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   input, select, textarea, button {
     -webkit-appearance: none !important;
+    appearance: none !important;
   }
 }
 
