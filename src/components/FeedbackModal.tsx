@@ -8,7 +8,7 @@ interface FeedbackModalProps {
 }
 
 const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  const [feedbackType, setFeedbackType] = useState<string>('Предложение');
+  const [feedbackType, setFeedbackType] = useState<string>('complaint');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -34,56 +34,73 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit
     }
   };
 
+  const handleTypeSelect = (type: string) => {
+    setFeedbackType(type);
+  };
+
+  const getPlaceholder = () => {
+    return feedbackType === 'complaint' ? 'Опишите вашу жалобу...' : 'Опишите ваше предложение...';
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="feedback-modal-backdrop" onClick={handleBackdropClick}>
-      <div className="feedback-modal">
-        <h2>Обратная связь</h2>
-        <button className="feedback-modal-close" onClick={onClose}>×</button>
-        
-        <form onSubmit={handleSubmit}>
-          <label>Тип обращения:</label>
-          <div className="feedback-type-options">
-            {['Проблема', 'Предложение', 'Вопрос'].map((type) => (
-              <button
-                key={type}
-                type="button"
-                className={`feedback-type-option ${feedbackType === type ? 'selected' : ''}`}
-                onClick={() => setFeedbackType(type)}
-              >
-                {type}
-              </button>
-            ))}
+    <div className="modal-backdrop" onClick={handleBackdropClick}>
+      <div className="modal-content">
+        <div className="modal-header">
+          <h3 className="modal-title">Обратная связь</h3>
+          <button className="modal-close" onClick={onClose}>×</button>
+        </div>
+        <div className="modal-body">
+          <p className="modal-message">Тип обращения:</p>
+          
+          <div className="feedback-type-buttons">
+            <button 
+              className={`type-button ${feedbackType === 'complaint' ? 'active' : ''}`}
+              onClick={() => handleTypeSelect('complaint')}
+              type="button"
+            >
+              Жалоба
+            </button>
+            <button 
+              className={`type-button ${feedbackType === 'suggestion' ? 'active' : ''}`}
+              onClick={() => handleTypeSelect('suggestion')}
+              type="button"
+            >
+              Предложение
+            </button>
           </div>
-
-          <label>Тип обращения:</label>
-          <textarea
+          
+          <p className="modal-message">Сообщение:</p>
+          
+          <textarea 
+            className="message-input"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Опишите ваше предложение"
-            required
+            placeholder={getPlaceholder()}
+            rows={4}
             disabled={isSubmitting}
           />
-
-          <div className="feedback-actions">
-            <button
-              type="button"
-              className="feedback-btn-cancel"
+          
+          <div className="modal-actions">
+            <button 
+              className="modal-button modal-button-cancel" 
               onClick={onClose}
               disabled={isSubmitting}
+              type="button"
             >
               Отмена
             </button>
-            <button
-              type="submit"
-              className="feedback-btn-submit"
+            <button 
+              className="modal-button modal-button-submit" 
+              onClick={handleSubmit}
               disabled={isSubmitting || !message.trim()}
+              type="button"
             >
               {isSubmitting ? 'Отправка...' : 'Отправить'}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

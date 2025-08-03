@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест модального окна обратной связи</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1e2e;
+            color: white;
+            padding: 20px;
+        }
+
+        /* Modal backdrop with blur effect */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+
+        /* Modal content */
+        .modal-content {
+            background: #4a4d6b;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 480px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease-out;
+            position: relative;
+        }
+
+        /* Modal header */
+        .modal-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 24px 16px;
+            gap: 12px;
+        }
+
+        .modal-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            color: #dc2626;
+        }
+
+        .modal-title {
+            flex: 1;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .modal-close {
+            background: #6c4aff;
+            border: none;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #5a3ad1;
+        }
+
+        /* Modal body */
+        .modal-body {
+            padding: 20px 24px 24px;
+        }
+
+        .modal-message {
+            margin: 0 0 16px 0;
+            color: #a1a5b7;
+            line-height: 1.5;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Button styles */
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Feedback type buttons */
+        .feedback-type-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .type-button {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #6b7280;
+            color: #a1a5b7;
+        }
+
+        .type-button.active {
+            background: #6c4aff;
+            color: white;
+        }
+
+        .type-button:hover:not(.active) {
+            background: #7c8293;
+            color: #ffffff;
+        }
+
+        /* Message input */
+        .message-input {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #6b7280;
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: #6c4aff;
+        }
+
+        .message-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .modal-button {
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .modal-button-cancel {
+            background-color: #6b7280;
+            color: #a1a5b7;
+            padding: 10px 16px;
+            flex: 0.7;
+        }
+
+        .modal-button-cancel:hover {
+            background-color: #7c8293;
+            color: #ffffff;
+        }
+
+        .modal-button-submit {
+            background-color: #6c4aff;
+            color: white;
+            padding: 12px 24px;
+            flex: 1;
+        }
+
+        .modal-button-submit:hover {
+            background-color: #5a3ad1;
+        }
+
+        /* Animations */
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Test button */
+        .test-button {
+            background: #6c4aff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест модального окна</h1>
+    <button class="test-button" onclick="showModal()">Показать модальное окно</button>
+
+    <!-- Модальное окно (скрыто по умолчанию) -->
+    <div class="modal-backdrop" id="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Обратная связь</h3>
+                <button class="modal-close" onclick="hideModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">Тип обращения:</p>
+                
+                <div class="feedback-type-buttons">
+                    <button class="type-button active" onclick="selectType('complaint')">Жалоба</button>
+                    <button class="type-button" onclick="selectType('suggestion')">Предложение</button>
+                </div>
+                
+                <p class="modal-message">Сообщение:</p>
+                
+                <textarea 
+                    class="message-input" 
+                    id="messageInput"
+                    placeholder="Опишите вашу жалобу..."
+                    rows="4"
+                ></textarea>
+                
+                <div class="modal-actions">
+                    <button class="modal-button modal-button-cancel" onclick="hideModal()">
+                        Отмена
+                    </button>
+                    <button class="modal-button modal-button-submit" onclick="submitFeedback()">
+                        Отправить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedType = 'complaint'; // По умолчанию выбрана жалоба
+
+        function showModal() {
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function hideModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function selectType(type) {
+            selectedType = type;
+            
+            // Убираем активный класс у всех кнопок
+            document.querySelectorAll('.type-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Добавляем активный класс к выбранной кнопке
+            event.target.classList.add('active');
+            
+            // Меняем placeholder в зависимости от типа
+            const messageInput = document.getElementById('messageInput');
+            if (type === 'complaint') {
+                messageInput.placeholder = 'Опишите вашу жалобу...';
+            } else if (type === 'suggestion') {
+                messageInput.placeholder = 'Опишите ваше предложение...';
+            }
+        }
+
+        function submitFeedback() {
+            const message = document.getElementById('messageInput').value.trim();
+            
+            if (!message) {
+                alert('Пожалуйста, введите сообщение');
+                return;
+            }
+            
+            // Здесь будет логика отправки формы
+            console.log('Тип:', selectedType);
+            console.log('Сообщение:', message);
+            
+            alert('Спасибо за обратную связь!');
+            hideModal();
+        }
+
+        // Закрытие по клику на backdrop
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideModal();
+            }
+        });
+    </script>
+</body>
+</html>

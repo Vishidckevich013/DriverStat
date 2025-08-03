@@ -1,171 +1,204 @@
-/* Backdrop */
-.feedback-modal-backdrop {
+/* Modal backdrop with blur effect */
+.modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 10000;
+  align-items: center;
+  z-index: 1000;
+  animation: modalFadeIn 0.2s ease-out;
 }
 
-/* Единое модальное окно */
-.feedback-modal {
+/* Modal content */
+.modal-content {
   background: #4a4d6b;
-  border-radius: 16px;
-  width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   max-width: 480px;
-  padding: 32px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
   position: relative;
 }
 
-/* Заголовок */
-.feedback-modal h2 {
-  margin: 0 0 32px 0;
-  color: #ffffff;
-  font-size: 1.5rem;
-  font-weight: 600;
+/* Modal header */
+.modal-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 24px 16px;
+  gap: 12px;
 }
 
-/* Кнопка закрытия */
-.feedback-modal-close {
-  position: absolute;
-  top: 32px;
-  right: 32px;
-  background: #7c3aed;
+.modal-title {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.modal-close {
+  background: #6c4aff;
   border: none;
+  font-size: 18px;
   color: white;
-  font-size: 1.2rem;
   cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
   width: 32px;
   height: 32px;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Форма */
-.feedback-modal form {
-  display: flex;
-  flex-direction: column;
+.modal-close:hover {
+  background: #5a3ad1;
 }
 
-/* Лейблы */
-.feedback-modal label {
+/* Modal body */
+.modal-body {
+  padding: 20px 24px 24px;
+}
+
+.modal-message {
+  margin: 0 0 16px 0;
   color: #a1a5b7;
-  font-size: 1rem;
+  line-height: 1.5;
+  font-size: 16px;
   font-weight: 500;
-  margin-bottom: 16px;
-  display: block;
 }
 
-/* Кнопки выбора типа */
-.feedback-type-options {
+/* Button styles */
+.modal-actions {
   display: flex;
   gap: 12px;
-  margin-bottom: 32px;
+  margin-top: 20px;
 }
 
-.feedback-type-option {
+/* Feedback type buttons */
+.feedback-type-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.type-button {
   flex: 1;
-  background: #6b7280;
-  border: none;
-  color: #a1a5b7;
   padding: 12px 16px;
+  border: none;
   border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 14px;
   font-weight: 500;
-  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #6b7280;
+  color: #a1a5b7;
 }
 
-.feedback-type-option.selected {
-  background: #7c3aed;
+.type-button.active {
+  background: #6c4aff;
   color: white;
 }
 
-/* Textarea */
-.feedback-modal textarea {
+.type-button:hover:not(.active) {
+  background: #7c8293;
+  color: #ffffff;
+}
+
+/* Message input */
+.message-input {
   width: 100%;
   background: transparent;
   border: 2px solid #6b7280;
   border-radius: 8px;
   color: #ffffff;
-  padding: 16px;
-  font-size: 1rem;
-  resize: vertical;
-  min-height: 120px;
+  padding: 12px;
+  font-size: 14px;
   font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  margin-bottom: 20px;
   box-sizing: border-box;
-  margin-bottom: 32px;
+  transition: border-color 0.3s ease;
 }
 
-.feedback-modal textarea:focus {
+.message-input:focus {
   outline: none;
-  border-color: #7c3aed;
+  border-color: #6c4aff;
 }
 
-.feedback-modal textarea::placeholder {
+.message-input::placeholder {
   color: #9ca3af;
 }
 
-/* Кнопки действий */
-.feedback-actions {
-  display: flex;
-  gap: 16px;
-  justify-content: flex-end;
-}
-
-.feedback-btn-cancel,
-.feedback-btn-submit {
-  padding: 14px 32px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
+.modal-button {
   border: none;
-  min-width: 120px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
 }
 
-.feedback-btn-cancel {
-  background: #6b7280;
+.modal-button-cancel {
+  background-color: #6b7280;
   color: #a1a5b7;
+  padding: 10px 16px;
+  flex: 0.7;
 }
 
-.feedback-btn-submit {
-  background: #7c3aed;
+.modal-button-cancel:hover {
+  background-color: #7c8293;
   color: #ffffff;
 }
 
-/* Мобильная адаптация */
-@media (max-width: 767px) {
-  .feedback-modal {
-    width: 95%;
-    margin: 16px;
-    padding: 24px;
+.modal-button-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-button-submit {
+  background-color: #6c4aff;
+  color: white;
+  padding: 12px 24px;
+  flex: 1;
+}
+
+.modal-button-submit:hover:not(:disabled) {
+  background-color: #5a3ad1;
+}
+
+.modal-button-submit:disabled {
+  background-color: #6b7280;
+  color: #a1a5b7;
+  cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .feedback-modal-close {
-    top: 24px;
-    right: 24px;
+  to {
+    opacity: 1;
   }
-  
-  .feedback-type-options {
-    flex-direction: column;
-    gap: 8px;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
   }
-  
-  .feedback-actions {
-    flex-direction: column-reverse;
-    gap: 12px;
-  }
-  
-  .feedback-btn-cancel,
-  .feedback-btn-submit {
-    width: 100%;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
