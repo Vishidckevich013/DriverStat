@@ -3,7 +3,7 @@
 .sidebar {
   background: #23262e;
   color: #f3f4f6;
-  width: 100%;
+  width: 100vw;
   min-height: auto;
   display: flex;
   flex-direction: row;
@@ -16,6 +16,8 @@
   border-top: 1.5px solid #2d2f36;
   z-index: 1000;
   overflow-x: auto;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* Логотип скрыт на мобильных */
