@@ -39,6 +39,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit
   return (
     <div className="feedback-modal-backdrop" onClick={handleBackdropClick}>
       <div className="feedback-modal">
+        {/* Заголовок */}
         <div className="feedback-modal-header">
           <h2>Обратная связь</h2>
           <button className="feedback-modal-close" onClick={onClose}>
@@ -46,45 +47,39 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit
           </button>
         </div>
 
+        {/* Форма */}
         <form onSubmit={handleSubmit} className="feedback-form">
-          <div className="feedback-type-selector">
+          {/* Секция выбора типа */}
+          <div className="feedback-type-section">
             <label className="feedback-type-label">Тип обращения:</label>
             <div className="feedback-type-options">
               {['Проблема', 'Предложение', 'Вопрос'].map((type) => (
-                <div
+                <button
                   key={type}
+                  type="button"
                   className={`feedback-type-option ${feedbackType === type ? 'selected' : ''}`}
                   onClick={() => setFeedbackType(type)}
                 >
-                  <input
-                    type="radio"
-                    name="feedbackType"
-                    value={type}
-                    checked={feedbackType === type}
-                    onChange={() => setFeedbackType(type)}
-                  />
                   {type}
-                </div>
+                </button>
               ))}
             </div>
           </div>
 
-          <div className="feedback-message-group">
-            <label htmlFor="feedback-message" className="feedback-message-label">
-              Тип обращения:
-            </label>
+          {/* Секция сообщения */}
+          <div className="feedback-message-section">
+            <label className="feedback-message-label">Тип обращения:</label>
             <textarea
-              id="feedback-message"
               className="feedback-message-input"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Опишите ваше предложение..."
-              rows={5}
+              placeholder="Опишите ваше предложение"
               required
               disabled={isSubmitting}
             />
           </div>
 
+          {/* Кнопки */}
           <div className="feedback-actions">
             <button
               type="button"
