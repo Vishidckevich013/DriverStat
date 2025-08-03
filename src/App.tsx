@@ -10,7 +10,7 @@ import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import AuthForm from './components/AuthForm';
 import Sidebar from './components/Sidebar';
-import DriveStatLogo from './components/DriveStatLogo';
+import Header from './components/Header';
 import { IconPlus, IconHistory, IconAnalytics, IconSettings, IconBack } from './components/icons';
 import Loading from './components/Loading';
 import { getCurrentUser, signIn, signUp, signOut } from './api/supabaseApi';
@@ -161,6 +161,9 @@ function App() {
           paddingBottom: '100px', // Место для мобильного сайдбара
           minHeight: '100vh'
         }}>
+          {/* Header */}
+          <Header />
+          
           {/* Контент главной страницы */}
           <div style={{ 
             flex: 1, 
@@ -170,10 +173,19 @@ function App() {
             justifyContent: 'center',
             padding: '20px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '32px' }}>
-              <DriveStatLogo size={64} />
-              <h1 style={{ color: '#6c4aff', marginLeft: '16px', marginBottom: 0, textAlign: 'center' }}>DriveStat</h1>
-            </div>
+            {/* Заголовок для десктопа - только текст */}
+            <h1 
+              className="home-title-desktop"
+              style={{ 
+                color: '#6c4aff', 
+                marginBottom: '32px', 
+                textAlign: 'center',
+                fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                display: 'none'
+              }}
+            >
+              DriveStat
+            </h1>
             <div style={{ color: '#bfc1c7', marginBottom: 24, fontSize: '1.1em', textAlign: 'center' }}>
               Добро пожаловать, {user.name}!
             </div>
@@ -225,6 +237,9 @@ function App() {
         paddingBottom: '100px', // Место для мобильного сайдбара
         minHeight: '100vh'
       }}>
+        {/* Header */}
+        <Header />
+        
         {/* Заголовок с кнопкой назад */}
         <div style={{ 
           display: 'flex', 
