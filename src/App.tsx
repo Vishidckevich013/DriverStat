@@ -10,7 +10,6 @@ import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import AuthForm from './components/AuthForm';
 import Sidebar from './components/Sidebar';
-import Header from './components/Header';
 import DriveStatLogo from './components/DriveStatLogo';
 import { IconPlus, IconHistory, IconAnalytics, IconSettings, IconBack } from './components/icons';
 import Loading from './components/Loading';
@@ -162,9 +161,6 @@ function App() {
           paddingBottom: '100px', // Место для мобильного сайдбара
           minHeight: '100vh'
         }}>
-          {/* Header */}
-          <Header />
-          
           {/* Контент главной страницы */}
           <div style={{ 
             flex: 1, 
@@ -229,9 +225,6 @@ function App() {
         paddingBottom: '100px', // Место для мобильного сайдбара
         minHeight: '100vh'
       }}>
-        {/* Header */}
-        <Header />
-        
         {/* Заголовок с кнопкой назад */}
         <div style={{ 
           display: 'flex', 
