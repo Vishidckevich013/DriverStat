@@ -492,31 +492,17 @@ tr:nth-child(odd) {
 
 /* Мобильные стили таблиц */
 @media (max-width: 767px) {
+  /* Убираем отступы главного контента на мобильных */
+  .main-content {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
   /* Позволяем прокрутку таблиц на мобильных */
   body {
     overflow-x: hidden !important; /* Убираем горизонтальный скролл на body */
   }
-  
-  .table-container {
-    width: calc(100% - 16px); /* Ширина с равными отступами */
-    margin: 16px 8px; /* Равные отступы 8px слева и справа */
-    border-radius: 12px;
-    background: #23262e;
-    overflow-x: auto !important;
-    overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch;
-    transform: translateZ(0); /* Аппаратное ускорение */
-    will-change: scroll-position;
-    border: 1px solid #35363f;
-    box-sizing: border-box;
-    position: relative;
-  }
-  
-  table {
-    min-width: 600px !important; /* Принудительная минимальная ширина */
-    font-size: 0.8em;
-    width: 600px !important; /* Фиксированная ширина для стабильного скролла */
-  }
+}
   
   .table-actions {
     display: flex;
@@ -544,6 +530,11 @@ tr:nth-child(odd) {
   .sidebar-desktop {
     display: none !important;
   }
+  
+  /* Позволяем прокрутку таблиц на мобильных */
+  body {
+    overflow-x: hidden !important; /* Убираем горизонтальный скролл на body */
+  }
 }
 
 /* Планшеты и десктопы */
@@ -557,21 +548,7 @@ tr:nth-child(odd) {
     display: none !important;
   }
   
-  /* Таблица на десктопе */
-  .table-container {
-    width: calc(100% - 32px);
-    margin: 18px 16px; /* Равные отступы слева и справа */
-    max-width: none;
-    box-sizing: border-box;
-  }
-  
-  table {
-    min-width: auto;
-    width: 100%;
-    font-size: 1em;
-  }
-  
-  /* Отступ для основного контента */
+  /* Отступ для основного контента только на больших экранах */
   .main-content {
     margin-left: 200px;
   }
