@@ -101,7 +101,9 @@
   }
 
   .logo {
-    display: block !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     font-size: 1.4rem;
     font-weight: bold;
     margin-bottom: 30px;
@@ -160,7 +162,9 @@
   }
 
   .logo {
-    display: block !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     font-size: 1.6rem !important;
     font-weight: bold;
     margin-bottom: 40px !important;

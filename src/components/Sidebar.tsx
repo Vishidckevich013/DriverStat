@@ -1,5 +1,6 @@
 import React from 'react';
 import './Sidebar.css';
+import DriveStatLogo from './DriveStatLogo';
 
 type Page = 'shifts' | 'add' | 'settings' | 'analytics' | 'home';
 
@@ -18,7 +19,8 @@ const menuItems: { icon: string; label: string; page: Exclude<Page, 'home'> }[] 
 const Sidebar: React.FC<SidebarProps> = ({ onNavigate, current }) => (
   <aside className="sidebar">
     <div className="logo">
-      <span style={{ fontWeight: 700, fontSize: 22, letterSpacing: 2 }}>DRIVER <span style={{ color: '#6c4aff' }}>STAT</span></span>
+      <DriveStatLogo size={32} />
+      <span style={{ fontWeight: 700, fontSize: 18, letterSpacing: 1, marginLeft: '8px' }}>DriveStat</span>
     </div>
     <nav className="menu">
       <ul>

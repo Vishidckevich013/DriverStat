@@ -10,6 +10,8 @@ import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import AuthForm from './components/AuthForm';
 import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import DriveStatLogo from './components/DriveStatLogo';
 import { IconPlus, IconHistory, IconAnalytics, IconSettings, IconBack } from './components/icons';
 import Loading from './components/Loading';
 import { getCurrentUser, signIn, signUp, signOut } from './api/supabaseApi';
@@ -156,24 +158,36 @@ function App() {
         <div className="main-content" style={{ 
           flex: 1, 
           display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          padding: '20px',
+          flexDirection: 'column',
           paddingBottom: '100px', // Место для мобильного сайдбара
           minHeight: '100vh'
         }}>
-          <h1 style={{ color: '#6c4aff', marginBottom: 32, textAlign: 'center' }}>DRIVER STAT</h1>
-          <div style={{ color: '#bfc1c7', marginBottom: 24, fontSize: '1.1em', textAlign: 'center' }}>
-            Добро пожаловать, {user.name}!
-          </div>
+          {/* Header */}
+          <Header />
+          
+          {/* Контент главной страницы */}
           <div style={{ 
+            flex: 1, 
             display: 'flex', 
             flexDirection: 'column', 
-            gap: 18, 
-            width: '100%',
-            maxWidth: '300px'
+            alignItems: 'center', 
+            justifyContent: 'center',
+            padding: '20px'
           }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '32px' }}>
+              <DriveStatLogo size={64} />
+              <h1 style={{ color: '#6c4aff', marginLeft: '16px', marginBottom: 0, textAlign: 'center' }}>DriveStat</h1>
+            </div>
+            <div style={{ color: '#bfc1c7', marginBottom: 24, fontSize: '1.1em', textAlign: 'center' }}>
+              Добро пожаловать, {user.name}!
+            </div>
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 18, 
+              width: '100%',
+              maxWidth: '300px'
+            }}>
             <button className="tg-btn" onClick={() => { setPage('add'); window.location.hash = 'add'; }}>
               <span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconPlus /></span> 
               Добавить смену
@@ -190,6 +204,7 @@ function App() {
               <span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconSettings /></span> 
               Настройки
             </button>
+            </div>
           </div>
         </div>
         
@@ -214,6 +229,9 @@ function App() {
         paddingBottom: '100px', // Место для мобильного сайдбара
         minHeight: '100vh'
       }}>
+        {/* Header */}
+        <Header />
+        
         {/* Заголовок с кнопкой назад */}
         <div style={{ 
           display: 'flex', 
