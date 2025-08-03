@@ -574,11 +574,39 @@ tr:nth-child(odd) {
   .main-content {
     margin-left: 200px;
   }
+  
+  /* Исправляем таблицу на планшетах */
+  .new-table-wrapper {
+    width: calc(100% - 32px) !important;
+    max-width: none !important;
+    margin: 16px auto !important;
+  }
+  
+  .new-table-scroll {
+    overflow-x: auto !important;
+  }
+  
+  .new-shifts-table {
+    min-width: 800px !important;
+    width: 100% !important;
+  }
 }
 
 @media (min-width: 1024px) {
   .main-content {
     margin-left: 240px;
+  }
+  
+  /* Улучшаем таблицу на десктопе */
+  .new-table-wrapper {
+    width: calc(100% - 64px) !important;
+    max-width: none !important;
+    margin: 24px auto !important;
+  }
+  
+  .new-shifts-table {
+    min-width: 900px !important;
+    width: 100% !important;
   }
 }
 
@@ -744,13 +772,13 @@ tr:nth-child(odd) {
 
 /* НОВАЯ УЛУЧШЕННАЯ ТАБЛИЦА */
 .new-table-wrapper {
-  margin: 16px auto; /* Центрирование по горизонтали */
+  margin: 16px auto;
   background: #23262e;
   border-radius: 12px;
   border: 2px solid #35363f;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-  width: calc(100% - 32px); /* Ширина экрана минус отступы */
+  width: calc(100% - 32px);
   max-width: calc(100vw - 32px);
 }
 
