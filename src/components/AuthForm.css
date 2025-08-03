@@ -148,19 +148,21 @@
 }
 
 .auth-switch-btn {
-  background: none;
-  border: none;
-  color: #6c4aff;
+  background: transparent !important;
+  border: none !important;
+  color: #6c4aff !important;
   cursor: pointer;
   font-size: inherit;
   text-decoration: underline;
   padding: 4px 8px;
   border-radius: 4px;
   transition: color 0.3s ease;
+  box-shadow: none !important;
 }
 
 .auth-switch-btn:hover:not(:disabled) {
-  color: #5b3ed4;
+  color: #5b3ed4 !important;
+  background: transparent !important;
 }
 
 .auth-switch-btn:disabled {
