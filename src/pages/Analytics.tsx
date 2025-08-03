@@ -118,7 +118,7 @@ const Analytics = () => {
 
   return (
     <div>
-      <h2>Аналитика</h2>
+      <h3 style={{ marginBottom: '20px', textAlign: 'center', color: '#f3f4f6' }}>Выберите период:</h3>
       
       {/* Выбор типа периода */}
       <div className="period-selector">
