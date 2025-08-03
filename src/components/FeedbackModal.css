@@ -1,0 +1,242 @@
+/* Backdrop для модального окна */
+.feedback-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Основное модальное окно */
+.feedback-modal {
+  background: #23263a;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Заголовок модального окна */
+.feedback-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #35363f;
+}
+
+.feedback-modal-header h2 {
+  margin: 0;
+  color: #f3f4f6;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.feedback-modal-close {
+  background: none;
+  border: none;
+  color: #bfc1c7;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.feedback-modal-close:hover {
+  color: #f3f4f6;
+  background: #35363f;
+}
+
+/* Форма обратной связи */
+.feedback-form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Селектор типа обращения */
+.feedback-type-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feedback-type-label {
+  color: #bfc1c7;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.feedback-type-options {
+  display: flex;
+  gap: 20px;
+}
+
+.feedback-type-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #bfc1c7;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.feedback-type-option:hover {
+  color: #f3f4f6;
+}
+
+.feedback-type-option input[type="radio"] {
+  accent-color: #6c4aff;
+  cursor: pointer;
+}
+
+/* Текстовое поле сообщения */
+.feedback-message-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feedback-message-label {
+  color: #bfc1c7;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.feedback-message-input {
+  background: #181c2f;
+  border: 2px solid #2a2d42;
+  border-radius: 8px;
+  color: #f3f4f6;
+  padding: 12px;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.feedback-message-input:focus {
+  outline: none;
+  border-color: #6c4aff;
+}
+
+.feedback-message-input::placeholder {
+  color: #6b7280;
+}
+
+.feedback-message-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Кнопки действий */
+.feedback-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.feedback-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 100px;
+}
+
+.feedback-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.feedback-btn-cancel {
+  background: #35363f;
+  color: #bfc1c7;
+}
+
+.feedback-btn-cancel:hover:not(:disabled) {
+  background: #454654;
+  color: #f3f4f6;
+}
+
+.feedback-btn-submit {
+  background: #6c4aff;
+  color: #fff;
+}
+
+.feedback-btn-submit:hover:not(:disabled) {
+  background: #5b3ed4;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 767px) {
+  .feedback-modal {
+    width: 95%;
+    margin: 16px;
+  }
+  
+  .feedback-modal-header {
+    padding: 16px 20px;
+  }
+  
+  .feedback-modal-header h2 {
+    font-size: 1.25rem;
+  }
+  
+  .feedback-form {
+    padding: 20px;
+    gap: 16px;
+  }
+  
+  .feedback-type-options {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .feedback-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  
+  .feedback-btn {
+    width: 100%;
+    padding: 14px 20px;
+  }
+}
