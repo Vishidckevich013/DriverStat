@@ -39,51 +39,37 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit
   return (
     <div className="feedback-modal-backdrop" onClick={handleBackdropClick}>
       <div className="feedback-modal">
-        {/* Заголовок */}
-        <div className="feedback-modal-header">
-          <h2>Обратная связь</h2>
-          <button className="feedback-modal-close" onClick={onClose}>
-            ×
-          </button>
-        </div>
-
-        {/* Форма */}
-        <form onSubmit={handleSubmit} className="feedback-form">
-          {/* Секция выбора типа */}
-          <div className="feedback-type-section">
-            <label className="feedback-type-label">Тип обращения:</label>
-            <div className="feedback-type-options">
-              {['Проблема', 'Предложение', 'Вопрос'].map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  className={`feedback-type-option ${feedbackType === type ? 'selected' : ''}`}
-                  onClick={() => setFeedbackType(type)}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
+        <h2>Обратная связь</h2>
+        <button className="feedback-modal-close" onClick={onClose}>×</button>
+        
+        <form onSubmit={handleSubmit}>
+          <label>Тип обращения:</label>
+          <div className="feedback-type-options">
+            {['Проблема', 'Предложение', 'Вопрос'].map((type) => (
+              <button
+                key={type}
+                type="button"
+                className={`feedback-type-option ${feedbackType === type ? 'selected' : ''}`}
+                onClick={() => setFeedbackType(type)}
+              >
+                {type}
+              </button>
+            ))}
           </div>
 
-          {/* Секция сообщения */}
-          <div className="feedback-message-section">
-            <label className="feedback-message-label">Тип обращения:</label>
-            <textarea
-              className="feedback-message-input"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Опишите ваше предложение"
-              required
-              disabled={isSubmitting}
-            />
-          </div>
+          <label>Тип обращения:</label>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Опишите ваше предложение"
+            required
+            disabled={isSubmitting}
+          />
 
-          {/* Кнопки */}
           <div className="feedback-actions">
             <button
               type="button"
-              className="feedback-btn feedback-btn-cancel"
+              className="feedback-btn-cancel"
               onClick={onClose}
               disabled={isSubmitting}
             >
@@ -91,7 +77,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit
             </button>
             <button
               type="submit"
-              className="feedback-btn feedback-btn-submit"
+              className="feedback-btn-submit"
               disabled={isSubmitting || !message.trim()}
             >
               {isSubmitting ? 'Отправка...' : 'Отправить'}
