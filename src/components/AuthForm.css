@@ -16,13 +16,20 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+.auth-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .auth-title {
   color: #6c4aff;
   text-align: center;
-  margin: 0 0 12px 0;
-  font-size: 2.5em;
+  margin: 12px 0 0 0;
+  font-size: 2.2em;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 
 .auth-subtitle {

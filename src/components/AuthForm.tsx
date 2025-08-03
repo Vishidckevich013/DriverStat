@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './AuthForm.css';
 import { IconUser, IconLock, IconMail } from './icons';
+import DriveStatLogo from './DriveStatLogo';
 
 interface AuthFormProps {
   onLogin: (loginOrEmail: string, password: string, rememberMe: boolean) => Promise<void>;
@@ -30,7 +31,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin, onRegister, loading, error
   return (
     <div className="auth-container">
       <div className="auth-form">
-        <h1 className="auth-title">DRIVER STAT</h1>
+        <div className="auth-logo">
+          <DriveStatLogo size={80} />
+          <h1 className="auth-title">DriveStat</h1>
+        </div>
         <h2 className="auth-subtitle">{isLogin ? 'Вход' : 'Регистрация'}</h2>
         
         {error && (
