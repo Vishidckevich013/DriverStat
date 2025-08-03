@@ -353,10 +353,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* Адаптивные таблицы */
 .table-container {
-  width: calc(100% - 32px); /* Ширина родителя минус отступы */
-  max-width: 100%;
-  margin: 18px auto; /* Центрирование с отступами сверху/снизу */
-  padding: 0 16px; /* Внутренние отступы для контента */
+  width: calc(100% - 32px); /* Ширина с отступами */
+  margin: 18px 16px; /* Равные отступы слева и справа */
   overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
@@ -400,15 +398,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 table {
-  width: calc(100% - 32px); /* Учитываем внутренние отступы контейнера */
+  width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   font-size: clamp(0.75em, 2vw, 1em);
   color: #f3f4f6;
-  min-width: 700px; /* Уменьшенная минимальная ширина */
+  min-width: 700px; /* Минимальная ширина для принудительного скролла */
   table-layout: auto;
   position: relative;
-  margin: 0 auto; /* Центрируем таблицу в контейнере */
+  margin: 0;
 }
 
 @media (min-width: 768px) {
@@ -500,9 +498,8 @@ tr:nth-child(odd) {
   }
   
   .table-container {
-    width: calc(100% - 16px); /* Ширина родителя минус отступы */
-    margin: 16px auto; /* Центрирование с равными отступами */
-    padding: 0 8px; /* Внутренние отступы */
+    width: calc(100% - 16px); /* Ширина с равными отступами */
+    margin: 16px 8px; /* Равные отступы 8px слева и справа */
     border-radius: 12px;
     background: #23262e;
     overflow-x: auto !important;
@@ -516,10 +513,9 @@ tr:nth-child(odd) {
   }
   
   table {
-    min-width: 600px; /* Уменьшенная ширина для лучшего скроллинга */
+    min-width: 600px !important; /* Принудительная минимальная ширина */
     font-size: 0.8em;
-    width: calc(100% - 16px); /* Учитываем внутренние отступы мобильного контейнера */
-    margin: 0 auto;
+    width: 600px !important; /* Фиксированная ширина для стабильного скролла */
   }
   
   .table-actions {
@@ -564,17 +560,15 @@ tr:nth-child(odd) {
   /* Таблица на десктопе */
   .table-container {
     width: calc(100% - 32px);
-    margin: 18px auto; /* Центрирование */
-    padding: 0 16px;
+    margin: 18px 16px; /* Равные отступы слева и справа */
     max-width: none;
     box-sizing: border-box;
   }
   
   table {
     min-width: auto;
-    width: calc(100% - 32px); /* Учитываем внутренние отступы десктопного контейнера */
+    width: 100%;
     font-size: 1em;
-    margin: 0 auto;
   }
   
   /* Отступ для основного контента */
