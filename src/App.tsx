@@ -174,10 +174,44 @@ function App() {
             justifyContent: 'center',
             padding: '20px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '32px' }}>
-              <DriveStatLogo size={64} />
-              <h1 style={{ color: '#6c4aff', marginLeft: '16px', marginBottom: 0, textAlign: 'center' }}>DriveStat</h1>
+            {/* Логотип и заголовок - показываем только на мобильных */}
+            <div 
+              className="home-logo-mobile"
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                marginBottom: '32px',
+                flexDirection: 'column',
+                gap: '16px'
+              }}
+            >
+              <DriveStatLogo size={64} className="home-logo-icon" />
+              <h1 
+                className="home-title"
+                style={{ 
+                  color: '#6c4aff', 
+                  marginBottom: 0, 
+                  textAlign: 'center',
+                  fontSize: 'clamp(2rem, 5vw, 3rem)'
+                }}
+              >
+                DriveStat
+              </h1>
             </div>
+            
+            {/* Заголовок для десктопа - только текст */}
+            <h1 
+              className="home-title-desktop"
+              style={{ 
+                color: '#6c4aff', 
+                marginBottom: '32px', 
+                textAlign: 'center',
+                fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                display: 'none'
+              }}
+            >
+              DriveStat
+            </h1>
             <div style={{ color: '#bfc1c7', marginBottom: 24, fontSize: '1.1em', textAlign: 'center' }}>
               Добро пожаловать, {user.name}!
             </div>

@@ -869,3 +869,17 @@ tr:nth-child(odd) {
     padding: 8px 6px; /* Меньшие отступы в ячейках */
   }
 }
+
+/* Стили для главной страницы - логотип показываем только на мобильных */
+
+/* На планшетах и десктопах скрываем логотип на главной */
+@media (min-width: 768px) {
+  .home-logo-mobile {
+    display: none !important;
+  }
+  
+  /* Показываем заголовок без логотипа */
+  .home-title-desktop {
+    display: block !important;
+  }
+}

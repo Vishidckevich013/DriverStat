@@ -9,7 +9,7 @@
 }
 
 .header-brand {
-  display: flex;
+  display: none; /* Скрываем брендинг на десктопе */
   align-items: center;
   gap: 12px;
 }
@@ -61,6 +61,11 @@
 @media (max-width: 767px) {
   .header {
     padding: 12px 16px;
+  }
+  
+  /* Показываем брендинг только на мобильных */
+  .header-brand {
+    display: flex !important;
   }
   
   .header-title {
