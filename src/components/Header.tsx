@@ -6,13 +6,12 @@ import FeedbackModal from './FeedbackModal';
 const Header = () => {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
-  const handleFeedbackSubmit = async (type: 'suggestion' | 'complaint', message: string) => {
+  const handleFeedbackSubmit = async (type: string, message: string) => {
     // Здесь можно добавить отправку на сервер
     console.log('Отправка обратной связи:', { type, message });
     
     // Временно просто показываем alert
-    const typeText = type === 'suggestion' ? 'Предложение' : 'Жалоба';
-    alert(`${typeText} отправлено:\n${message}`);
+    alert(`${type} отправлено:\n${message}`);
   };
 
   return (
