@@ -232,11 +232,12 @@ const Shifts = () => {
           </button>
         </div>
       ) : (
-        <div className="table-container">
-          <div className="mobile-table-header">
+        <div className="new-table-wrapper">
+          <div className="new-table-header">
             История смен ({shifts.length})
           </div>
-          <table>
+          <div className="new-table-scroll">
+            <table className="new-shifts-table">
             <thead>
               <tr>
                 <th>Дата</th>
@@ -362,7 +363,8 @@ const Shifts = () => {
             ))}
           </tbody>
         </table>
-      </div>
+          </div>
+        </div>
       )}
 
       {/* Модальное окно подтверждения очистки истории */}
