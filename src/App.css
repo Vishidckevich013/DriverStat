@@ -539,7 +539,7 @@ tr:nth-child(odd) {
   /* ПРИНУДИТЕЛЬНЫЙ СКРОЛЛ ТАБЛИЦЫ НА МОБИЛЬНЫХ */
   .new-table-wrapper {
     width: calc(100vw - 32px) !important; /* Точная ширина viewport минус отступы */
-    margin: 16px 16px !important; /* Точные отступы слева и справа */
+    margin: 16px auto !important; /* Центрирование по горизонтали */
     max-width: calc(100vw - 32px) !important;
     box-sizing: border-box !important;
   }
@@ -744,7 +744,7 @@ tr:nth-child(odd) {
 
 /* НОВАЯ УЛУЧШЕННАЯ ТАБЛИЦА */
 .new-table-wrapper {
-  margin: 16px; /* Равные отступы от всех краёв экрана */
+  margin: 16px auto; /* Центрирование по горизонтали */
   background: #23262e;
   border-radius: 12px;
   border: 2px solid #35363f;
