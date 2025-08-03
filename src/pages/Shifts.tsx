@@ -201,6 +201,9 @@ const Shifts = () => {
   // Функция для форматирования даты в российском формате
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
+    const currentYear = new Date().getFullYear();
+    const shiftYear = date.getFullYear();
+    
     const months = [
       'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
       'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
@@ -208,9 +211,14 @@ const Shifts = () => {
     
     const day = date.getDate();
     const month = months[date.getMonth()];
-    const year = date.getFullYear().toString().slice(-2); // Последние 2 цифры года
     
-    return `${day} ${month} ${year}г`;
+    // Если год смены совпадает с текущим - не показываем год
+    if (shiftYear === currentYear) {
+      return `${day} ${month}`;
+    }
+    
+    // Если год отличается - показываем полный год
+    return `${day} ${month} ${shiftYear}`;
   };
 
   if (loading) {
