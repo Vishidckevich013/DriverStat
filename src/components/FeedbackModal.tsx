@@ -4,11 +4,11 @@ import './FeedbackModal.css';
 interface FeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (type: 'suggestion' | 'complaint', message: string) => void;
+  onSubmit: (type: string, message: string) => void;
 }
 
 const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  const [feedbackType, setFeedbackType] = useState<'suggestion' | 'complaint'>('suggestion');
+  const [feedbackType, setFeedbackType] = useState<string>('Предложение');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,26 +50,22 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit
           <div className="feedback-type-selector">
             <label className="feedback-type-label">Тип обращения:</label>
             <div className="feedback-type-options">
-              <label className="feedback-type-option">
-                <input
-                  type="radio"
-                  name="feedbackType"
-                  value="suggestion"
-                  checked={feedbackType === 'suggestion'}
-                  onChange={(e) => setFeedbackType(e.target.value as 'suggestion')}
-                />
-                <span>Предложение</span>
-              </label>
-              <label className="feedback-type-option">
-                <input
-                  type="radio"
-                  name="feedbackType"
-                  value="complaint"
-                  checked={feedbackType === 'complaint'}
-                  onChange={(e) => setFeedbackType(e.target.value as 'complaint')}
-                />
-                <span>Жалоба</span>
-              </label>
+              {['Проблема', 'Предложение', 'Вопрос'].map((type) => (
+                <div
+                  key={type}
+                  className={`feedback-type-option ${feedbackType === type ? 'selected' : ''}`}
+                  onClick={() => setFeedbackType(type)}
+                >
+                  <input
+                    type="radio"
+                    name="feedbackType"
+                    value={type}
+                    checked={feedbackType === type}
+                    onChange={() => setFeedbackType(type)}
+                  />
+                  {type}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -83,9 +79,11 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder={
-                feedbackType === 'suggestion' 
+                feedbackType === 'Предложение' 
                   ? 'Опишите ваше предложение...' 
-                  : 'Опишите проблему...'
+                  : feedbackType === 'Проблема'
+                  ? 'Опишите проблему...'
+                  : 'Задайте ваш вопрос...'
               }
               rows={5}
               required

@@ -62,19 +62,22 @@
 }
 
 .feedback-modal-close {
-  background: none;
+  background: #7c3aed;
   border: none;
-  color: #bfc1c7;
-  font-size: 1.5rem;
+  color: white;
+  font-size: 1.2rem;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: color 0.2s ease, background-color 0.2s ease;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .feedback-modal-close:hover {
-  color: #f3f4f6;
-  background: #35363f;
+  background: #6d28d9;
 }
 
 /* Форма обратной связи */
@@ -100,26 +103,37 @@
 
 .feedback-type-options {
   display: flex;
-  gap: 20px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .feedback-type-option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
+  background: #35363f;
+  border: 2px solid #35363f;
   color: #bfc1c7;
-  font-size: 1rem;
-  transition: color 0.2s ease;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  min-width: 100px;
 }
 
 .feedback-type-option:hover {
+  border-color: #7c3aed;
   color: #f3f4f6;
 }
 
+.feedback-type-option.selected {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: white;
+}
+
 .feedback-type-option input[type="radio"] {
-  accent-color: #6c4aff;
-  cursor: pointer;
+  display: none;
 }
 
 /* Текстовое поле сообщения */
@@ -136,8 +150,8 @@
 }
 
 .feedback-message-input {
-  background: #181c2f;
-  border: 2px solid #2a2d42;
+  background: transparent;
+  border: 2px solid #35363f;
   border-radius: 8px;
   color: #f3f4f6;
   padding: 12px;
@@ -227,7 +241,12 @@
   
   .feedback-type-options {
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+  }
+  
+  .feedback-type-option {
+    width: 100%;
+    text-align: center;
   }
   
   .feedback-actions {
