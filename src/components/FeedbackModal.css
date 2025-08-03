@@ -51,8 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px;
-  border-bottom: 1px solid #35363f;
+  padding: 24px 24px 0 24px;
 }
 
 .feedback-modal-header h2 {
@@ -83,11 +82,10 @@
 
 /* Форма обратной связи */
 .feedback-form {
-  padding: 24px;
+  padding: 16px 24px 24px 24px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: transparent;
 }
 
 /* Селектор типа обращения */
@@ -229,7 +227,7 @@
   }
   
   .feedback-modal-header {
-    padding: 16px 20px;
+    padding: 20px 20px 0 20px;
   }
   
   .feedback-modal-header h2 {
@@ -237,7 +235,7 @@
   }
   
   .feedback-form {
-    padding: 20px;
+    padding: 16px 20px 20px 20px;
     gap: 16px;
   }
   
