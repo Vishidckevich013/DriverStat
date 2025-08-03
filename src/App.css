@@ -538,9 +538,10 @@ tr:nth-child(odd) {
   
   /* ПРИНУДИТЕЛЬНЫЙ СКРОЛЛ ТАБЛИЦЫ НА МОБИЛЬНЫХ */
   .new-table-wrapper {
-    width: calc(100% - 32px) !important; /* Ширина экрана минус отступы */
-    margin: 16px !important; /* Равные отступы 16px со всех сторон */
+    width: calc(100vw - 32px) !important; /* Точная ширина viewport минус отступы */
+    margin: 16px 16px !important; /* Точные отступы слева и справа */
     max-width: calc(100vw - 32px) !important;
+    box-sizing: border-box !important;
   }
   
   .new-table-scroll {

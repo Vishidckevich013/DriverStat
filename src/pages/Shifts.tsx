@@ -198,6 +198,21 @@ const Shifts = () => {
     return calcSalary(shift) + calcFuel(shift);
   };
 
+  // Функция для форматирования даты в российском формате
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const months = [
+      'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+      'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+    ];
+    
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear().toString().slice(-2); // Последние 2 цифры года
+    
+    return `${day} ${month} ${year}г`;
+  };
+
   if (loading) {
     return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
   }
@@ -317,7 +332,7 @@ const Shifts = () => {
               ) : (
                 // Обычный режим просмотра
                 <tr key={shift.id} style={{ textAlign: 'center' }}>
-                  <td>{shift.date}</td>
+                  <td>{formatDate(shift.date)}</td>
                   {settings.minSalaryEnabled && <td>{shift.type === 'evening' ? 'Вечерняя' : 'Дневная'}</td>}
                   <td>{shift.orders}</td>
                   <td>{shift.distance}</td>
@@ -389,7 +404,7 @@ const Shifts = () => {
         }}
         onConfirm={confirmDeleteShift}
         title="Удаление смены"
-        message={shiftToDelete ? `Удалить смену от ${new Date(shiftToDelete.date).toLocaleDateString('ru-RU')}?` : ''}
+        message={shiftToDelete ? `Удалить смену от ${formatDate(shiftToDelete.date)}?` : ''}
         confirmText="Удалить"
         cancelText="Отмена"
         type="warning"
