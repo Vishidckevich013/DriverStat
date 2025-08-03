@@ -71,20 +71,14 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose, onSubmit
 
           <div className="feedback-message-group">
             <label htmlFor="feedback-message" className="feedback-message-label">
-              Сообщение:
+              Тип обращения:
             </label>
             <textarea
               id="feedback-message"
               className="feedback-message-input"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder={
-                feedbackType === 'Предложение' 
-                  ? 'Опишите ваше предложение...' 
-                  : feedbackType === 'Проблема'
-                  ? 'Опишите проблему...'
-                  : 'Задайте ваш вопрос...'
-              }
+              placeholder="Опишите ваше предложение..."
               rows={5}
               required
               disabled={isSubmitting}
