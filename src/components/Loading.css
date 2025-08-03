@@ -14,9 +14,8 @@
   justify-content: center;
 }
 
-.wheel-icon {
+.loading-logo {
   animation: spin 2s linear infinite;
-  filter: drop-shadow(0 0 10px rgba(108, 74, 255, 0.3));
 }
 
 @keyframes spin {

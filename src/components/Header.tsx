@@ -1,9 +1,11 @@
 import './Header.css';
+import DriveStatLogo from './DriveStatLogo';
 
 const Header = () => (
   <header className="header">
-    <div className="search">
-      <input type="text" placeholder="Search" />
+    <div className="header-brand">
+      <DriveStatLogo size={40} className="header-logo" />
+      <span className="header-title">DriveStat</span>
     </div>
     <div className="header-actions">
       <button className="notif">🔔</button>
