@@ -353,11 +353,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* Адаптивные таблицы */
 .table-container {
-  width: 100%;
-  overflow-x: scroll !important;
+  width: calc(100vw - 32px); /* Полная ширина экрана минус отступы */
+  max-width: 100%;
+  margin: 18px 16px; /* Отступы от краёв экрана */
+  overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
-  margin-top: 18px;
   border-radius: 14px;
   background: #23262e;
   box-shadow: 0 2px 12px #0003;
@@ -365,9 +366,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   scrollbar-color: #6c4aff #23262e;
   touch-action: pan-x;
   position: relative;
-  /* Принудительная прокрутка */
-  scroll-behavior: auto;
-  -ms-overflow-style: auto;
+  scroll-behavior: smooth;
+  border: 2px solid #35363f;
 }
 
 /* Исправление для WebKit браузеров */
@@ -401,11 +401,12 @@ table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: clamp(0.7em, 2vw, 1.05em);
+  font-size: clamp(0.75em, 2vw, 1em);
   color: #f3f4f6;
-  min-width: 800px !important; /* Принудительная минимальная ширина */
-  table-layout: auto; /* Позволяем автоматическое изменение размера */
+  min-width: 700px; /* Уменьшенная минимальная ширина */
+  table-layout: auto;
   position: relative;
+  margin: 0; /* Убираем отступы таблицы */
 }
 
 @media (min-width: 768px) {
@@ -493,24 +494,30 @@ tr:nth-child(odd) {
 @media (max-width: 767px) {
   /* Позволяем прокрутку таблиц на мобильных */
   body {
-    overflow-x: visible !important;
+    overflow-x: hidden !important; /* Убираем горизонтальный скролл на body */
   }
   
   .table-container {
-    margin: 0 -16px; /* Расширяем контейнер на всю ширину экрана */
-    border-radius: 0;
+    width: calc(100vw - 16px); /* Почти вся ширина экрана с небольшими отступами */
+    margin: 16px 8px; /* Минимальные отступы от краёв */
+    border-radius: 12px;
     background: #23262e;
-    overflow-x: scroll !important;
+    overflow-x: auto !important;
     overflow-y: visible !important;
     -webkit-overflow-scrolling: touch;
     transform: translateZ(0); /* Аппаратное ускорение */
     will-change: scroll-position;
+    border: 1px solid #35363f;
+    /* Центрирование контейнера */
+    position: relative;
+    left: 0;
+    right: 0;
   }
   
   table {
-    min-width: 900px !important; /* Еще больше минимальная ширина на мобильных */
-    font-size: 0.85em;
-    width: 900px !important; /* Фиксированная ширина для принудительной прокрутки */
+    min-width: 600px; /* Уменьшенная ширина для лучшего скроллинга */
+    font-size: 0.8em;
+    width: 600px; /* Фиксированная ширина для стабильного скроллинга */
   }
   
   .table-actions {
@@ -531,6 +538,9 @@ tr:nth-child(odd) {
     color: #f3f4f6;
     font-weight: 600;
     text-align: center;
+    border-radius: 12px 12px 0 0;
+    margin: 0;
+    border-bottom: 1px solid #35363f;
   }
   
   .sidebar-desktop {
@@ -547,6 +557,19 @@ tr:nth-child(odd) {
   /* Скрываем мобильный сайдбар */
   .sidebar {
     display: none !important;
+  }
+  
+  /* Таблица на десктопе */
+  .table-container {
+    width: calc(100% - 32px);
+    margin: 18px 16px;
+    max-width: none;
+  }
+  
+  table {
+    min-width: auto;
+    width: 100%;
+    font-size: 1em;
   }
   
   /* Отступ для основного контента */
