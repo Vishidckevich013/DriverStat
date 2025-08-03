@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getShifts, clearShifts, getSettings, getCurrentUser, deleteShift, updateShift } from '../api/supabaseApi';
 import ConfirmModal from '../components/ConfirmModal';
 import NotificationModal from '../components/NotificationModal';
+import Loading from '../components/Loading';
 
 const Shifts = () => {
   const [shifts, setShifts] = useState<any[]>([]);
@@ -222,7 +223,7 @@ const Shifts = () => {
   };
 
   if (loading) {
-    return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
+    return <Loading />;
   }
   return (
     <div>

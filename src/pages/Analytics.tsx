@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { getShifts, getSettings, getCurrentUser } from '../api/supabaseApi';
+import Loading from '../components/Loading';
 
 type PeriodType = 'week' | 'month' | 'custom';
 
@@ -113,7 +114,7 @@ const Analytics = () => {
   const avgDistance = filtered.length ? totalDistance / filtered.length : 0;
 
   if (loading) {
-    return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
+    return <Loading />;
   }
 
   return (

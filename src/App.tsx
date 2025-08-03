@@ -11,7 +11,9 @@ import Settings from './pages/Settings';
 import AuthForm from './components/AuthForm';
 import Sidebar from './components/Sidebar';
 import { IconPlus, IconHistory, IconAnalytics, IconSettings, IconBack } from './components/icons';
-import { signUp, signIn, signOut, getCurrentUser, type User } from './api/supabaseApi';
+import Loading from './components/Loading';
+import { getCurrentUser, signIn, signUp, signOut } from './api/supabaseApi';
+import type { User } from './api/supabaseApi';
 
 type Page = 'home' | 'add' | 'shifts' | 'analytics' | 'settings';
 
@@ -119,7 +121,7 @@ function App() {
         background: '#181c2f',
         color: '#bfc1c7' 
       }}>
-        Загрузка...
+        <Loading />
       </div>
     );
   }

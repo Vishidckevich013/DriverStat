@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { addShift, getCurrentUser, getSettings } from '../api/supabaseApi';
 import NotificationModal from '../components/NotificationModal';
+import Loading from '../components/Loading';
 
 const AddShift = () => {
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
@@ -109,7 +110,7 @@ const AddShift = () => {
   };
 
   if (initLoading) {
-    return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
+    return <Loading />;
   }
 
   return (

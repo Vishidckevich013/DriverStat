@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { getSettings, saveSettings, getCurrentUser } from '../api/supabaseApi';
 // import { checkDatabaseTables, refreshSupabaseSchema } from '../api/supabaseApi';
 import NotificationModal from '../components/NotificationModal';
+import Loading from '../components/Loading';
 
 interface SettingsProps {
   onLogout: () => void;
@@ -157,7 +158,7 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   */
 
   if (loading) {
-    return <div style={{ color: '#bfc1c7', textAlign: 'center', marginTop: 40 }}>Загрузка...</div>;
+    return <Loading />;
   }
 
   return (
