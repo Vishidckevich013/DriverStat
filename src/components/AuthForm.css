@@ -103,10 +103,12 @@
 }
 
 .auth-checkbox input[type="checkbox"] {
-  width: auto;
+  width: 18px;
+  height: 18px;
   margin: 0;
   padding: 0;
   accent-color: #6c4aff;
+  cursor: pointer;
 }
 
 .auth-checkbox label {
@@ -152,7 +154,9 @@
   cursor: pointer;
   font-size: inherit;
   text-decoration: underline;
-  padding: 0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.3s ease;
 }
 
 .auth-switch-btn:hover:not(:disabled) {
