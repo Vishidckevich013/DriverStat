@@ -537,17 +537,24 @@ tr:nth-child(odd) {
   }
   
   /* ПРИНУДИТЕЛЬНЫЙ СКРОЛЛ ТАБЛИЦЫ НА МОБИЛЬНЫХ */
+  .new-table-wrapper {
+    width: calc(100% - 32px) !important; /* Ширина экрана минус отступы */
+    margin: 16px !important; /* Равные отступы 16px со всех сторон */
+    max-width: calc(100vw - 32px) !important;
+  }
+  
   .new-table-scroll {
     overflow-x: scroll !important;
     overflow-y: visible !important;
     -webkit-overflow-scrolling: touch !important;
     transform: translateZ(0) !important; /* Аппаратное ускорение */
     will-change: scroll-position !important;
+    width: 100% !important; /* Контейнер скролла занимает всю ширину таблицы */
   }
   
   .new-shifts-table {
-    min-width: 700px !important; /* Принудительная ширина больше экрана */
-    width: 700px !important;
+    min-width: 600px !important; /* Контент внутри может быть шире */
+    width: 600px !important; /* Фиксированная ширина контента для скролла */
   }
 }
 
@@ -742,6 +749,8 @@ tr:nth-child(odd) {
   border: 2px solid #35363f;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  width: calc(100% - 32px); /* Ширина экрана минус отступы */
+  max-width: calc(100vw - 32px);
 }
 
 .new-table-header {
@@ -754,17 +763,16 @@ tr:nth-child(odd) {
 }
 
 .new-table-scroll {
-  overflow-x: auto !important;
-  overflow-y: visible !important;
-  -webkit-overflow-scrolling: touch !important;
-  width: 100% !important;
-  max-width: 100% !important;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
 }
 
 .new-shifts-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px !important; /* Принудительная минимальная ширина для скролла */
+  min-width: 600px; /* Контент может быть шире контейнера */
   min-width: 700px; /* Принудительная ширина для скролла */
   border-collapse: collapse;
   margin: 0;
