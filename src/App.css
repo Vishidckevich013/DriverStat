@@ -533,7 +533,21 @@ tr:nth-child(odd) {
   
   /* Позволяем прокрутку таблиц на мобильных */
   body {
-    overflow-x: hidden !important; /* Убираем горизонтальный скролл на body */
+    overflow-x: visible !important; /* Разрешаем горизонтальный скролл для таблиц */
+  }
+  
+  /* ПРИНУДИТЕЛЬНЫЙ СКРОЛЛ ТАБЛИЦЫ НА МОБИЛЬНЫХ */
+  .new-table-scroll {
+    overflow-x: scroll !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    transform: translateZ(0) !important; /* Аппаратное ускорение */
+    will-change: scroll-position !important;
+  }
+  
+  .new-shifts-table {
+    min-width: 700px !important; /* Принудительная ширина больше экрана */
+    width: 700px !important;
   }
 }
 
@@ -740,14 +754,17 @@ tr:nth-child(odd) {
 }
 
 .new-table-scroll {
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  -webkit-overflow-scrolling: touch !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 .new-shifts-table {
   width: 100%;
+  border-collapse: collapse;
+  min-width: 600px !important; /* Принудительная минимальная ширина для скролла */
   min-width: 700px; /* Принудительная ширина для скролла */
   border-collapse: collapse;
   margin: 0;
