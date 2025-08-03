@@ -11,7 +11,6 @@ import Settings from './pages/Settings';
 import AuthForm from './components/AuthForm';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import DriveStatLogo from './components/DriveStatLogo';
 import { IconPlus, IconHistory, IconAnalytics, IconSettings, IconBack } from './components/icons';
 import Loading from './components/Loading';
 import { getCurrentUser, signIn, signUp, signOut } from './api/supabaseApi';
@@ -174,31 +173,6 @@ function App() {
             justifyContent: 'center',
             padding: '20px'
           }}>
-            {/* Логотип и заголовок - показываем только на мобильных */}
-            <div 
-              className="home-logo-mobile"
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                marginBottom: '32px',
-                flexDirection: 'column',
-                gap: '16px'
-              }}
-            >
-              <DriveStatLogo size={64} className="home-logo-icon" />
-              <h1 
-                className="home-title"
-                style={{ 
-                  color: '#6c4aff', 
-                  marginBottom: 0, 
-                  textAlign: 'center',
-                  fontSize: 'clamp(2rem, 5vw, 3rem)'
-                }}
-              >
-                DriveStat
-              </h1>
-            </div>
-            
             {/* Заголовок для десктопа - только текст */}
             <h1 
               className="home-title-desktop"
