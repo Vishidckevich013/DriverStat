@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 24px 0 24px;
+  padding: 32px 32px 0 32px;
 }
 
 .feedback-modal-header h2 {
@@ -82,17 +82,17 @@
 
 /* Форма обратной связи */
 .feedback-form {
-  padding: 16px 24px 24px 24px;
+  padding: 24px 32px 32px 32px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 /* Селектор типа обращения */
 .feedback-type-selector {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .feedback-type-label {
@@ -140,7 +140,7 @@
 .feedback-message-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
 .feedback-message-label {
@@ -154,10 +154,10 @@
   border: 2px solid #35363f;
   border-radius: 8px;
   color: #f3f4f6;
-  padding: 12px;
+  padding: 16px;
   font-size: 1rem;
   resize: vertical;
-  min-height: 120px;
+  min-height: 140px;
   transition: border-color 0.3s ease;
   font-family: inherit;
 }
@@ -179,20 +179,20 @@
 /* Кнопки действий */
 .feedback-actions {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   justify-content: flex-end;
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 .feedback-btn {
-  padding: 12px 24px;
+  padding: 14px 28px;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
-  min-width: 100px;
+  min-width: 120px;
 }
 
 .feedback-btn:disabled {
@@ -227,7 +227,7 @@
   }
   
   .feedback-modal-header {
-    padding: 20px 20px 0 20px;
+    padding: 24px 24px 0 24px;
   }
   
   .feedback-modal-header h2 {
@@ -235,8 +235,8 @@
   }
   
   .feedback-form {
-    padding: 16px 20px 20px 20px;
-    gap: 16px;
+    padding: 20px 24px 24px 24px;
+    gap: 20px;
   }
   
   .feedback-type-options {
