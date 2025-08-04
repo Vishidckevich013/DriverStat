@@ -33,6 +33,7 @@
   align-items: center;
   padding: 20px 24px 16px;
   gap: 12px;
+  border-bottom: none !important;
 }
 
 .modal-title {
@@ -99,18 +100,18 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: #6b7280;
-  color: #a1a5b7;
+  background: #6b7280 !important;
+  color: #a1a5b7 !important;
 }
 
 .type-button.active {
-  background: #6c4aff;
-  color: white;
+  background: #6c4aff !important;
+  color: white !important;
 }
 
 .type-button:hover:not(.active) {
-  background: #7c8293;
-  color: #ffffff;
+  background: #7c8293 !important;
+  color: #ffffff !important;
 }
 
 /* Message input */
@@ -149,15 +150,15 @@
 }
 
 .modal-button-cancel {
-  background-color: #6b7280;
-  color: #a1a5b7;
+  background-color: #6b7280 !important;
+  color: #a1a5b7 !important;
   padding: 10px 16px;
   flex: 0.7;
 }
 
 .modal-button-cancel:hover {
-  background-color: #7c8293;
-  color: #ffffff;
+  background-color: #7c8293 !important;
+  color: #ffffff !important;
 }
 
 .modal-button-cancel:disabled {
@@ -166,14 +167,14 @@
 }
 
 .modal-button-submit {
-  background-color: #6c4aff;
-  color: white;
+  background-color: #6c4aff !important;
+  color: white !important;
   padding: 12px 24px;
   flex: 1;
 }
 
 .modal-button-submit:hover:not(:disabled) {
-  background-color: #5a3ad1;
+  background-color: #5a3ad1 !important;
 }
 
 .modal-button-submit:disabled {
