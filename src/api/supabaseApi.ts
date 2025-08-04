@@ -396,6 +396,59 @@ export async function getSettings(user_id: string) {
   return data;
 }
 
+// Отправка обратной связи в Telegram
+export async function sendFeedbackToTelegram(type: string, message: string, userInfo?: { name?: string; email?: string }) {
+  const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+  const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+  
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.warn('Telegram Bot не настроен. Добавьте VITE_TELEGRAM_BOT_TOKEN и VITE_TELEGRAM_CHAT_ID в .env файл');
+    return false;
+  }
+  
+  const typeEmoji = type === 'complaint' ? '⚠️' : '💡';
+  const typeText = type === 'complaint' ? 'Жалоба' : 'Предложение';
+  
+  const telegramMessage = `
+${typeEmoji} <b>Новая обратная связь - ${typeText}</b>
+
+📝 <b>Сообщение:</b>
+${message}
+
+👤 <b>От пользователя:</b>
+${userInfo?.name || 'Неизвестный пользователь'}
+${userInfo?.email ? `📧 ${userInfo.email}` : ''}
+
+🕐 <b>Время:</b> ${new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}
+  `.trim();
+  
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: telegramMessage,
+        parse_mode: 'HTML',
+      }),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Ошибка отправки в Telegram:', errorData);
+      return false;
+    }
+    
+    console.log('Сообщение успешно отправлено в Telegram');
+    return true;
+  } catch (error) {
+    console.error('Ошибка при отправке в Telegram:', error);
+    return false;
+  }
+}
+
 // Сохранить/обновить настройки пользователя
 export async function saveSettings(user_id: string, settings: any) {
   console.log('API saveSettings: Сохраняем настройки для пользователя:', user_id);

@@ -2,16 +2,33 @@ import { useState } from 'react';
 import './Header.css';
 import DriveStatLogo from './DriveStatLogo';
 import FeedbackModal from './FeedbackModal';
+import { sendFeedbackToTelegram, getCurrentUser } from '../api/supabaseApi';
 
 const Header = () => {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   const handleFeedbackSubmit = async (type: string, message: string) => {
-    // Здесь можно добавить отправку на сервер
-    console.log('Отправка обратной связи:', { type, message });
-    
-    // Временно просто показываем alert
-    alert(`${type} отправлено:\n${message}`);
+    try {
+      // Получаем информацию о текущем пользователе
+      const user = await getCurrentUser();
+      
+      // Отправляем в Telegram
+      const telegramSent = await sendFeedbackToTelegram(type, message, {
+        name: user?.name || 'Гость',
+        email: user?.email
+      });
+      
+      if (telegramSent) {
+        alert('Спасибо за обратную связь! Ваше сообщение отправлено.');
+      } else {
+        // Fallback если Telegram не настроен
+        console.log('Отправка обратной связи:', { type, message, user: user?.name });
+        alert(`${type === 'complaint' ? 'Жалоба' : 'Предложение'} принято:\n${message}`);
+      }
+    } catch (error) {
+      console.error('Ошибка отправки обратной связи:', error);
+      alert('Произошла ошибка при отправке. Попробуйте позже.');
+    }
   };
 
   return (
