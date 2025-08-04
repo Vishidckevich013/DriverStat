@@ -1,11 +1,40 @@
 import { supabase } from '../supabaseClient';
 
+// Функция для генерации аватарки по умолчанию
+export function generateDefaultAvatar(name: string, size: number = 120): string {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  
+  if (!ctx) {
+    return '';
+  }
+  
+  canvas.width = size;
+  canvas.height = size;
+  
+  // Фиолетовый фон
+  ctx.fillStyle = '#6c4aff';
+  ctx.fillRect(0, 0, size, size);
+  
+  // Белый текст с первой буквой имени
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `${size * 0.4}px Arial, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  
+  const firstLetter = name.charAt(0).toUpperCase() || 'U';
+  ctx.fillText(firstLetter, size / 2, size / 2);
+  
+  return canvas.toDataURL('image/png');
+}
+
 // Типы для пользователя
 export interface User {
   id: string;
   email: string;
   name: string;
   username: string;
+  avatar?: string;
   created_at: string;
 }
 
@@ -40,6 +69,9 @@ export async function signUp(email: string, password: string, name: string, user
   if (error) throw error;
   if (!data.user) throw new Error('Ошибка создания пользователя');
   
+  // Генерируем аватарку по умолчанию
+  const defaultAvatar = generateDefaultAvatar(name);
+  
   // Пытаемся сохранить пользователя в таблицу users (если триггер не сработал)
   const { error: insertError } = await supabase
     .from('users')
@@ -47,7 +79,8 @@ export async function signUp(email: string, password: string, name: string, user
       id: data.user.id,
       email: data.user.email,
       name: name,
-      username: username
+      username: username,
+      avatar: defaultAvatar
     }]);
     
   // Игнорируем ошибку дублирования (если триггер уже создал запись)
@@ -60,6 +93,7 @@ export async function signUp(email: string, password: string, name: string, user
     email: data.user.email!,
     name: name,
     username: username,
+    avatar: defaultAvatar,
     created_at: data.user.created_at!
   };
 }
@@ -154,11 +188,13 @@ export async function getCurrentUser(): Promise<User | null> {
     if (userError) {
       console.error('Ошибка получения данных пользователя из таблицы users:', userError);
       // Fallback: используем данные из auth.users
+      const fallbackName = user.user_metadata?.name || 'Пользователь';
       return {
         id: user.id,
         email: user.email!,
-        name: user.user_metadata?.name || 'Пользователь',
+        name: fallbackName,
         username: user.user_metadata?.username || '',
+        avatar: user.user_metadata?.avatar || generateDefaultAvatar(fallbackName),
         created_at: user.created_at!
       };
     }
@@ -168,6 +204,7 @@ export async function getCurrentUser(): Promise<User | null> {
       email: user.email!,
       name: userInfo.name || user.user_metadata?.name || 'Пользователь',
       username: userInfo.username || user.user_metadata?.username || '',
+      avatar: userInfo.avatar || user.user_metadata?.avatar || generateDefaultAvatar(userInfo.name || 'Пользователь'),
       created_at: user.created_at!
     };
   } catch (error) {
@@ -447,6 +484,43 @@ ${userInfo?.email ? `📧 ${userInfo.email}` : ''}
     console.error('Ошибка при отправке в Telegram:', error);
     return false;
   }
+}
+
+// Обновить профиль пользователя
+export async function updateUserProfile(
+  user_id: string, 
+  profileData: { name: string; email: string; username: string }
+): Promise<User> {
+  console.log('API updateUserProfile: Обновляем профиль пользователя:', user_id);
+  console.log('API updateUserProfile: Новые данные:', profileData);
+
+  // Сначала обновляем данные в таблице users
+  const { data, error } = await supabase
+    .from('users')
+    .update({
+      name: profileData.name,
+      email: profileData.email,
+      username: profileData.username
+    })
+    .eq('id', user_id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('API updateUserProfile: Ошибка при обновлении профиля:', error);
+    throw error;
+  }
+
+  console.log('API updateUserProfile: Профиль успешно обновлен:', data);
+  
+  // Возвращаем обновленные данные в формате User
+  return {
+    id: data.id,
+    email: data.email,
+    name: data.name,
+    username: data.username,
+    created_at: data.created_at
+  };
 }
 
 // Сохранить/обновить настройки пользователя

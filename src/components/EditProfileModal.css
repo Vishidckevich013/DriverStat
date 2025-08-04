@@ -1,0 +1,236 @@
+/* Используем общие стили модального окна */
+/* Дополнительные стили для формы редактирования профиля */
+
+/* Стили для загрузки и предпросмотра аватара */
+.avatar-preview-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: rgba(107, 114, 128, 0.1);
+  border-radius: 8px;
+}
+
+.current-avatar {
+  flex-shrink: 0;
+}
+
+.avatar-preview-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #6b7280;
+}
+
+.avatar-preview-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #6c4aff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  border: 2px solid #6b7280;
+}
+
+.avatar-upload-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-file-input {
+  display: none;
+}
+
+.avatar-file-label {
+  flex: 1;
+  padding: 12px 16px;
+  background: transparent;
+  border: 2px solid #6b7280;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 14px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avatar-file-label:hover {
+  border-color: #6c4aff;
+  background: rgba(108, 74, 255, 0.1);
+}
+
+.generate-default-avatar-btn {
+  padding: 8px 16px;
+  background: #374151;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.generate-default-avatar-btn:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.generate-default-avatar-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-file-btn {
+  padding: 8px 12px;
+  background: #ef4444;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.clear-file-btn:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.clear-file-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-profile-input {
+  width: 100%;
+  background: transparent;
+  border: 2px solid #6b7280;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  margin-bottom: 8px;
+}
+
+.edit-profile-input:focus {
+  outline: none;
+  border-color: #6c4aff;
+}
+
+.edit-profile-input.error {
+  border-color: #ef4444;
+}
+
+.edit-profile-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.edit-profile-input.disabled {
+  opacity: 0.5;
+  background: rgba(107, 114, 128, 0.2);
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.edit-profile-input::placeholder {
+  color: #9ca3af;
+}
+
+.edit-profile-error {
+  display: block;
+  color: #ef4444;
+  font-size: 12px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 640px) {
+  .modal-content {
+    width: 95%;
+    max-width: 95%;
+  }
+
+  .modal-header {
+    padding: 16px 20px 12px;
+  }
+
+  .modal-title {
+    font-size: 16px;
+  }
+
+  .modal-body {
+    padding: 16px 20px 20px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-button-cancel,
+  .modal-button-submit {
+    flex: none;
+    width: 100%;
+  }
+
+  .avatar-preview-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .avatar-upload-section {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .avatar-file-label {
+    max-width: 100%;
+  }
+}
+
+/* Особенности для очень маленьких экранов */
+@media (max-width: 400px) {
+  .modal-content {
+    width: 98%;
+    max-width: 98%;
+  }
+
+  .modal-header {
+    padding: 12px 16px 8px;
+  }
+
+  .modal-body {
+    padding: 12px 16px 16px;
+  }
+
+  .edit-profile-input {
+    padding: 10px;
+    font-size: 16px; /* Предотвращает зум на iOS */
+  }
+
+  .avatar-preview-image,
+  .avatar-preview-placeholder {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+}

@@ -11,7 +11,7 @@ import Settings from './pages/Settings';
 import AuthForm from './components/AuthForm';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import { IconPlus, IconHistory, IconAnalytics, IconSettings, IconBack } from './components/icons';
+import { IconPlus, IconHistory, IconAnalytics, IconBack } from './components/icons';
 import Loading from './components/Loading';
 import { getCurrentUser, signIn, signUp, signOut } from './api/supabaseApi';
 import type { User } from './api/supabaseApi';
@@ -207,10 +207,6 @@ function App() {
             <button className="tg-btn" onClick={() => { setPage('analytics'); window.location.hash = 'analytics'; }}>
               <span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconAnalytics /></span> 
               Аналитика
-            </button>
-            <button className="tg-btn" onClick={() => { setPage('settings'); window.location.hash = 'settings'; }}>
-              <span style={{verticalAlign:'middle',marginRight:10,display:'inline-block'}}><IconSettings /></span> 
-              Настройки
             </button>
             </div>
           </div>

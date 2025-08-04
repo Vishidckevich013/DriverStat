@@ -38,14 +38,40 @@
   align-items: center;
   gap: 16px;
 }
+
+.profile-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.profile-area:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .header-actions .user {
   font-weight: 500;
+  transition: color 0.2s ease;
 }
+
+.profile-area:hover .user {
+  color: #60a5fa;
+}
+
 .header-actions .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   border: 2px solid #353a5a;
+  transition: border-color 0.2s ease;
+}
+
+.profile-area:hover .avatar {
+  border-color: #60a5fa;
 }
 .header-actions button {
   background: #353a5a !important;
@@ -83,6 +109,10 @@
   
   .header-actions .user {
     display: none; /* Скрываем имя пользователя на мобильных */
+  }
+  
+  .profile-area {
+    padding: 4px; /* Уменьшаем отступы на мобильных */
   }
   
   .header-actions button {

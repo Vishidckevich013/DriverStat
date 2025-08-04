@@ -1,0 +1,239 @@
+/* Profile Modal Backdrop */
+.profile-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998;
+  pointer-events: none; /* Позволяет кликать через backdrop */
+}
+
+/* Profile Modal Container */
+.profile-modal {
+  position: fixed;
+  background: #2a2f3a;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  min-width: 280px;
+  max-width: 320px;
+  pointer-events: auto;
+  animation: profileModalSlideIn 0.2s ease-out;
+  border: 1px solid #4a4d6b;
+}
+
+/* Стрелка указывающая на аватар */
+.profile-modal-arrow {
+  position: absolute;
+  top: -8px;
+  right: 16px;
+  width: 16px;
+  height: 16px;
+  background: #2a2f3a;
+  border: 1px solid #4a4d6b;
+  border-bottom: none;
+  border-right: none;
+  transform: rotate(45deg);
+  z-index: 9999;
+}
+
+/* Header секция с информацией о пользователе */
+.profile-modal-header {
+  display: flex;
+  padding: 20px;
+  gap: 12px;
+  align-items: center;
+}
+
+.profile-modal-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.profile-modal-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-modal-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #6c4aff, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+
+.profile-modal-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-modal-name {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-modal-email {
+  margin: 0 0 2px 0;
+  font-size: 14px;
+  color: #a1a5b7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-modal-username {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Разделитель */
+.profile-modal-divider {
+  height: 1px;
+  background: #4a4d6b;
+  margin: 0;
+}
+
+/* Разделитель внутри меню с дополнительными отступами */
+.profile-modal-divider.profile-modal-divider-menu {
+  margin: 10px 0 !important;
+}
+
+/* Меню действий */
+.profile-modal-menu {
+  padding: 12px 0;
+  margin: 0 12px;
+}
+
+.profile-modal-menu-item {
+  width: 100%;
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-size: 14px;
+  color: #ffffff;
+  text-align: left;
+  opacity: 0.7;
+}
+
+.profile-modal-menu-item:hover {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: #60a5fa;
+  opacity: 1;
+}
+
+/* Специфичный hover для обычных кнопок (не кнопка выхода) */
+.profile-modal-menu-item:not(.profile-modal-logout):hover {
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.profile-modal-menu-item:focus {
+  outline: none !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.profile-modal-menu-item:active {
+  outline: none !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.profile-modal-menu-item.profile-modal-logout {
+  color: #ef4444 !important;
+  opacity: 1 !important;
+}
+
+.profile-modal-menu-item.profile-modal-logout .profile-modal-menu-icon {
+  color: #ef4444 !important;
+}
+
+.profile-modal-menu-item.profile-modal-logout span {
+  color: #ef4444 !important;
+}
+
+.profile-modal-menu-item.profile-modal-logout:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: #f87171 !important;
+}
+
+.profile-modal-menu-item.profile-modal-logout:hover .profile-modal-menu-icon {
+  color: #f87171 !important;
+}
+
+.profile-modal-menu-item.profile-modal-logout:hover span {
+  color: #f87171 !important;
+}
+
+.profile-modal-menu-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Анимации */
+@keyframes profileModalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+  .profile-modal {
+    min-width: 260px;
+    max-width: 300px;
+  }
+  
+  .profile-modal-header {
+    padding: 16px;
+  }
+  
+  .profile-modal-divider {
+    margin: 0 16px;
+  }
+  
+  .profile-modal-menu-item {
+    padding: 10px 16px;
+  }
+}

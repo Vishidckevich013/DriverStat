@@ -23,7 +23,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
       <div>
         <p style={{ 
           margin: '0 0 20px 0', 
-          color: '#374151', 
+          color: '#ffffff', 
           lineHeight: '1.5',
           fontSize: '16px' 
         }}>

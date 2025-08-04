@@ -10,8 +10,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
   animation: modalFadeIn 0.2s ease-out;
+}
+
+/* Специальный класс для модальных окон с более высоким приоритетом */
+.modal-backdrop.high-priority {
+  z-index: 11000;
 }
 
 /* Modal content */

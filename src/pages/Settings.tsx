@@ -277,23 +277,6 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
           </button>
         </div>
         */}
-        
-        <button 
-          type="button" 
-          onClick={onLogout}
-          style={{ 
-            background: '#ff4757', 
-            color: '#fff', 
-            border: 'none', 
-            padding: '12px 20px', 
-            borderRadius: 8, 
-            cursor: 'pointer',
-            marginTop: 20,
-            width: '100%'
-          }}
-        >
-          Выйти из аккаунта
-        </button>
       </form>
 
       {/* Модальное окно уведомлений */}
